@@ -485,7 +485,7 @@
                           // Überprüfe die Größe (localStorage hat typischerweise ~5MB Limit)
                         if (stateString.length < 4 * 1024 * 1024) { // 4MB Sicherheitsgrenze
                             localStorage.setItem('markdownViewerState', stateString);
-                            if (!silent) showToast('Cache aktualisiert.', 'success');
+                            if (!silent) showToast('Cache updated.', 'success');
                             
                             // Update cached indicator in the file list after saving
                             updateFileListCacheIndicators(fileContents);
@@ -502,14 +502,14 @@
                                 }))
                             };
                             localStorage.setItem('markdownViewerState', JSON.stringify(reducedState));
-                            if (!silent) showToast('Nur die aktuelle Datei wurde gespeichert. Der Ordner enthält zu viele/große Dateien.', 'info');
-                            
+                            if (!silent) showToast('Only the current file was saved. The folder contains too many/large files.', 'info');
+
                             // Update cached indicator for the current file only
                             updateFileListCacheIndicators({ [currentFileName]: currentFileRawContent });
                         }
                     });
                 } else {
-                    // Speichere einzelne Datei direkt
+                    // Save individual file directly
                     const stateToSave = {
                         fileName: currentFileName,
                         timestamp: new Date().getTime(),
@@ -521,8 +521,8 @@
                         }))
                     };                    
                     localStorage.setItem('markdownViewerState', JSON.stringify(stateToSave));
-                    if (!silent) showToast('Datei wurde im Browser-Cache gespeichert.', 'success');
-                    
+                    if (!silent) showToast('File saved to browser cache.', 'success');
+
                     // Update cached indicator in the file list
                     updateFileListCacheIndicators(fileContents);
                 }
@@ -572,7 +572,7 @@
                 
                 // Show notification if not silent
                 if (!silent) {
-                    showToast('Cache aktualisiert.', 'success');
+                    showToast('Cache updated.', 'success');
                 }
                 
                 // Update UI indicators
@@ -654,10 +654,9 @@
                                         
                                         // Bei nicht gespeicherten Dateien zeigen wir eine Nachricht an
                                         return Promise.resolve(new Blob([
-                                            "# Dateiinhalt nicht verfügbar\n\n" +
-                                            "Der Inhalt dieser Datei wurde nicht im Browserspeicher gesichert.\n\n" +
-                                            "Bitte laden Sie den Ordner erneut über den 'Ordner öffnen' Button, " + 
-                                            "um auf alle Dateien im Ordner zugreifen zu können."
+                                            "# File content not available\n\n" +
+                                            "The content of this file was not saved in the browser cache.\n\n" +
+                                            "Please reload the folder using the 'Open Folder' button to access all files in the folder."
                                         ], { type: 'text/markdown' }));
                                     }
                                 };
@@ -810,7 +809,7 @@
             URL.revokeObjectURL(url);
             
             // Toast-Benachrichtigung anzeigen
-            showToast(`Datei "${currentFileName}" wurde heruntergeladen.`, 'success');
+            showToast(`Download of "${currentFileName}" initiated.`, 'success');
         }
         
         // Event Listener for Download Button
@@ -842,12 +841,12 @@
         }        // Function to Clear Current File: Unloads the current file and resets the UI
         function clearCurrentFile() {
             // Bestätigungsdialog anzeigen
-            if (currentFileName && confirm(`Möchten Sie wirklich "${currentFileName}" entladen?`)) {
+            if (currentFileName && confirm(`Do you really want to unload "${currentFileName}"?`)) {
                 // Lokalen Speicher löschen
                 localStorage.removeItem('markdownViewerState');
                 
                 // Toast-Benachrichtigung zeigen
-                showToast('Alle gespeicherten Dateien wurden aus dem Browser-Speicher gelöscht.', 'info');
+                showToast('All saved files have been removed from the browser storage.', 'info');
                 
                 // UI zurücksetzen
                 displayPlaceholder("Select a folder or a file.");
