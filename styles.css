@@ -369,6 +369,21 @@
             color: var(--ios-white); /* Changes text color for the selected item */
             font-weight: 600; /* Makes text bold for the selected item */
         }
+          /* Cache State for File List Items (im Browser gespeicherte Dateien) */
+        #fileList li.cached::after {
+            content: 'cached version'; /* Text-Label statt Haken-Symbol */
+            display: inline-block;
+            margin-left: 8px;
+            color: var(--ios-system-gray-1); /* Grauton für das Label */
+            font-weight: 400; /* Leichteres Schriftgewicht */
+            font-size: 0.85em; /* Etwas kleinere Schrift */
+            opacity: 0.8; /* Leicht transparent */
+            font-style: italic; /* Kursiver Text */
+        }
+        
+        #fileList li.selected.cached::after {
+            color: rgba(255, 255, 255, 0.9); /* Hellerer Text bei Auswahl */
+        }
 
         /* Improved file list display for mobile */
         @media (max-width: 768px) {
@@ -397,6 +412,14 @@
                 max-height: 50vh; /* Limit height but allow enough space for files */
                 margin-bottom: 12px; /* Add some bottom margin */
                 padding-bottom: 8px; /* Add padding at bottom */
+            }
+            
+            /* Anpassungen für das Cache-Label auf Mobilgeräten */
+            #fileList li.cached::after {
+                display: block;
+                margin-left: 0;
+                margin-top: 4px;
+                font-size: 0.8em;
             }
         }
 

@@ -129,22 +129,29 @@
                 
                 await displayFileContent(file, file.name); // Display its content
                     }
-        });
-
-        // Function to Render File List: Populates the sidebar with names of loaded files
+        });        // Function to Render File List: Populates the sidebar with names of loaded files
         function renderFileList() {
             fileList.innerHTML = ''; // Clears existing file list items
             currentFiles.forEach(file => { // Iterates through current files
                 const li = document.createElement('li'); // Creates a new list item element
                 li.textContent = file.name; // Sets the text to the file name
-                // Adds event listener to display file content when a file name is clicked
+                
+                // Markiere Dateien, die im Cache verfügbar sind
+                if (file.cachedContent) {
+                    li.classList.add('cached'); // Füge Klasse für im Browser gespeicherte Dateien hinzu
+                }
+                  // Adds event listener to display file content when a file name is clicked
                 li.addEventListener('click', async () => { 
                     await displayFileContent(file, file.name); // Displays content
                     highlightSelectedFile(file.name); // Highlights the clicked file in the list
-                    // If on mobile and sidebar is visible, hide it after selection
-                    if (sidebar.classList.contains('mobile-visible')) {
-                        sidebar.classList.remove('mobile-visible');
-                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    
+                    // Auf Mobilgeräten die Sidebar geöffnet lassen und den Inhalt darunter anpassen
+                    if (window.innerWidth <= 768 && sidebar.classList.contains('mobile-visible')) {
+                        // Statt die Sidebar zu schließen, passen wir den Inhalt an ihre Höhe an
+                        setTimeout(() => {
+                            const sidebarHeight = sidebar.getBoundingClientRect().height;
+                            document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
+                        }, 10);
                     }
                 });
                 fileList.appendChild(li); // Adds the list item to the file list
@@ -152,6 +159,18 @@
         }        // Function to Display File Content: Reads and displays the content of a selected file
         async function displayFileContent(fileOrHandle, fileName) {
             try {
+                // Prüfen, ob wir den Inhalt bereits im Objekt haben (für gecachte Dateien)
+                if (fileOrHandle.cachedContent) {
+                    // Direkt den gecachten Inhalt verwenden
+                    const content = fileOrHandle.cachedContent.replace(/\r\n/g, '\n');
+                    
+                    // Update the file object with normalized content
+                    fileOrHandle.cachedContent = content;
+                    
+                    updateUIWithFileContent(content, fileName);
+                    return;
+                }
+                
                 let file;
                 // Checks if it's a FileSystemFileHandle (not used in current input method, but good for the future) or a standard File object
                 if (fileOrHandle.getFile) {  // This would be for File System Access API handles
@@ -160,52 +179,19 @@
                     file = fileOrHandle;
                 }
                 const reader = new FileReader(); // Creates a FileReader to read the file content
-                
-                // Defines what happens when the file is successfully loaded
+                  // Defines what happens when the file is successfully loaded
                 reader.onload = (e) => {
                     // Normalisiere Zeilenumbrüche im gelesenen Inhalt
                     const content = e.target.result.replace(/\r\n/g, '\n');
                     
-                    currentFileRawContent = content; // Stores the raw file content
-                    originalFileContent = content; // Stores original content for comparison
-                    currentFileName = fileName; // Stores the current file name
-                    contentHeaderText.textContent = fileName; // Updates the header with the file name
-                    editButton.style.display = 'inline-block'; // Shows the Edit button
-                    editButton.disabled = false; // Enables the Edit button
+                    // Always save content in the cachedContent attribute
+                    fileOrHandle.cachedContent = content;
                     
-                    // Reset contentWasChanged when loading a new file
-                    contentWasChanged = false;
-                    downloadButton.style.display = 'none'; // Hides the Download button initially
+                    // Update localStorage whenever we load a new file
+                    updateUIWithFileContent(content, fileName);
                     
-                    clearButton.style.display = 'inline-block'; // Shows the Clear button
-                    
-                    // Aktuellen Zustand im localStorage speichern
-                    saveStateToLocalStorage();
-
-                    if (isEditMode) {
-                        // If in edit mode, updates the content of the TUI editor
-                        if (tuiEditor) tuiEditor.setMarkdown(currentFileRawContent);
-                        // Fallback: If TUI editor is not initialized (should not happen if logic is correct)
-                        else initializeTuiEditor(currentFileRawContent); 
-                    } else {
-                        // If in view mode, renders Markdown and destroys TUI editor if present
-                        markdownOutput.innerHTML = marked.parse(currentFileRawContent); // Parses Markdown to HTML
-                        markdownOutput.style.display = 'block'; // Shows Markdown output area
-                        wysiwygEditorContainer.style.display = 'none'; // Hides WYSIWYG editor
-                        if (tuiEditor) { tuiEditor.destroy(); tuiEditor = null; } // Cleans up TUI editor instance
-                    }                    markdownOutput.classList.remove('placeholder'); // Removes placeholder class when content is loaded
-                      // Wenn wir auf Mobilgeräten sind, sicherstellen, dass das Menü geöffnet bleibt und der Inhalt richtig angezeigt wird
-                    if (window.innerWidth <= 768) {
-                        // Keep the sidebar visible on mobile and adjust content margin
-                        sidebar.classList.add('mobile-visible');
-                        mobileMenuButton.setAttribute('aria-expanded', 'true');
-                        
-                        // Adjust content area margin based on sidebar height
-                        setTimeout(() => {
-                            const sidebarHeight = sidebar.getBoundingClientRect().height;
-                            document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
-                        }, 10);
-                    }
+                    // After loading, save to localStorage to ensure it's cached
+                    saveStateToLocalStorage(true);
                 };
                 // Defines what happens if an error occurs while reading the file
                 reader.onerror = () => displayErrorLoadingFile(fileName);
@@ -213,6 +199,63 @@
             } catch (error) {
                 console.error('Error accessing file:', error); // Logs error to the console
                 displayErrorLoadingFile(fileName); // Shows error message in the UI
+            }
+        }// Hilfsfunktion, die die UI mit dem Dateiinhalt aktualisiert
+        function updateUIWithFileContent(content, fileName) {
+            // Prüfen, ob wir eine neue Datei laden oder eine andere als zuvor
+            const isNewFile = currentFileName !== fileName;
+            
+            currentFileRawContent = content; // Stores the raw file content
+            originalFileContent = content; // Stores original content for comparison
+            currentFileName = fileName; // Stores the current file name
+            contentHeaderText.textContent = fileName; // Updates the header with the file name
+            editButton.style.display = 'inline-block'; // Shows the Edit button
+            editButton.disabled = false; // Enables the Edit button
+            
+            // Reset contentWasChanged when loading a new file
+            contentWasChanged = false;
+            downloadButton.style.display = 'none'; // Hides the Download button initially
+            
+            clearButton.style.display = 'inline-block'; // Shows the Clear button
+            
+            // Aktuellen Zustand nur speichern, wenn wir eine neue Datei laden (nicht bei Wechsel zwischen Files)
+            // oder wenn der Zustand noch nie gespeichert wurde
+            if (isNewFile && !localStorage.getItem('markdownViewerState')) {
+                saveStateToLocalStorage(true); // Silent-Modus - keine Toast-Nachricht
+            }            // Always update the cached content in the current file object
+            if (currentFiles && currentFiles.length > 0) {
+                const currentFileObj = currentFiles.find(file => file.name === fileName);
+                if (currentFileObj) {
+                    currentFileObj.cachedContent = content;
+                }
+            }
+
+            if (isEditMode) {
+                // If in edit mode, updates the content of the TUI editor
+                if (tuiEditor) tuiEditor.setMarkdown(currentFileRawContent);
+                // Fallback: If TUI editor is not initialized (should not happen if logic is correct)
+                else initializeTuiEditor(currentFileRawContent); 
+            } else {
+                // If in view mode, renders Markdown and destroys TUI editor if present
+                markdownOutput.innerHTML = marked.parse(currentFileRawContent); // Parses Markdown to HTML
+                markdownOutput.style.display = 'block'; // Shows Markdown output area
+                wysiwygEditorContainer.style.display = 'none'; // Hides WYSIWYG editor
+                if (tuiEditor) { tuiEditor.destroy(); tuiEditor = null; } // Cleans up TUI editor instance
+            }                    
+            
+            markdownOutput.classList.remove('placeholder'); // Removes placeholder class when content is loaded
+              
+            // Wenn wir auf Mobilgeräten sind, sicherstellen, dass das Menü geöffnet bleibt und der Inhalt richtig angezeigt wird
+            if (window.innerWidth <= 768) {
+                // Keep the sidebar visible on mobile and adjust content margin
+                sidebar.classList.add('mobile-visible');
+                mobileMenuButton.setAttribute('aria-expanded', 'true');
+                
+                // Adjust content area margin based on sidebar height
+                setTimeout(() => {
+                    const sidebarHeight = sidebar.getBoundingClientRect().height;
+                    document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
+                }, 10);
             }
         }
         
@@ -360,24 +403,194 @@
                 item.classList.toggle('selected', item.textContent === fileName);
             });
         }        // Funktionen zum Speichern und Wiederherstellen des Anwendungszustands
-        function saveStateToLocalStorage() {
+        function saveStateToLocalStorage(silent = false) {
             // Speichern der Dateiinformationen
             if (currentFileName && currentFileRawContent) {
+                // Erstelle ein Objekt für alle Dateiinhalte
+                const fileContents = {};
+                
+                // Speichere die aktuelle Datei
+                fileContents[currentFileName] = currentFileRawContent;
+                
+                // Überprüfe, ob andere Dateien bereits im localStorage gespeichert sind
+                try {
+                    const existingState = JSON.parse(localStorage.getItem('markdownViewerState'));
+                    if (existingState && existingState.fileContents) {
+                        // Übernehme bestehende Dateiinhalte und überschreibe die aktuelle Datei
+                        Object.assign(fileContents, existingState.fileContents, fileContents);
+                    }
+                } catch (error) {
+                    console.error('Error reading existing state:', error);
+                }
+                
+                // Update the file objects with cached content to ensure consistency
+                if (currentFiles.length > 0) {
+                    // First update the current file objects with cached content 
+                    currentFiles.forEach(file => {
+                        const fileName = file.name;
+                        if (fileContents[fileName] && !file.cachedContent) {
+                            file.cachedContent = fileContents[fileName];
+                        }
+                    });
+                    
+                    // Then save all files including those that were not yet cached
+                    const readPromises = currentFiles.map(file => {
+                        // Skip the current file, it's already saved
+                        if (file.name === currentFileName) return Promise.resolve();
+                        
+                        return new Promise(resolve => {
+                            // If the file already has cachedContent, use that directly
+                            if (file.cachedContent) {
+                                fileContents[file.name] = file.cachedContent;
+                                resolve();
+                                return;
+                            }
+                            
+                            const reader = new FileReader();
+                            reader.onload = e => {
+                                // Normalisiere Zeilenumbrüche und speichere im fileContents-Objekt
+                                const content = e.target.result.replace(/\r\n/g, '\n');
+                                fileContents[file.name] = content;
+                                // Also update the file object's cachedContent property
+                                file.cachedContent = content;
+                                resolve();
+                            };
+                            reader.onerror = () => resolve(); // Bei Fehler überspringen
+                            
+                            // Wenn es sich um ein File-Objekt handelt
+                            if (file instanceof File) {
+                                reader.readAsText(file);
+                            } else if (file.getFile) {
+                                // Wenn es ein FileSystemFileHandle ist
+                                file.getFile().then(f => reader.readAsText(f)).catch(() => resolve());
+                            } else {
+                                resolve();
+                            }
+                        });
+                    });
+                    
+                    // Alle Dateien lesen und dann den State speichern
+                    Promise.all(readPromises).then(() => {
+                        // Überprüfe die Größe des zu speichernden Objekts
+                        const stateString = JSON.stringify({
+                            fileName: currentFileName,
+                            timestamp: new Date().getTime(),
+                            folderPath: currentFolderPath || '',
+                            fileContents: fileContents,
+                            files: currentFiles.map(file => ({
+                                name: file.name,
+                                path: file.webkitRelativePath || ''
+                            }))
+                        });
+                          // Überprüfe die Größe (localStorage hat typischerweise ~5MB Limit)
+                        if (stateString.length < 4 * 1024 * 1024) { // 4MB Sicherheitsgrenze
+                            localStorage.setItem('markdownViewerState', stateString);
+                            if (!silent) showToast('Cache aktualisiert.', 'success');
+                            
+                            // Update cached indicator in the file list after saving
+                            updateFileListCacheIndicators(fileContents);
+                        } else {
+                            // Nur die aktuelle Datei speichern, wenn alles zu groß ist
+                            const reducedState = {
+                                fileName: currentFileName,
+                                timestamp: new Date().getTime(),
+                                folderPath: currentFolderPath || '',
+                                fileContents: { [currentFileName]: currentFileRawContent },
+                                files: currentFiles.map(file => ({
+                                    name: file.name,
+                                    path: file.webkitRelativePath || ''
+                                }))
+                            };
+                            localStorage.setItem('markdownViewerState', JSON.stringify(reducedState));
+                            if (!silent) showToast('Nur die aktuelle Datei wurde gespeichert. Der Ordner enthält zu viele/große Dateien.', 'info');
+                            
+                            // Update cached indicator for the current file only
+                            updateFileListCacheIndicators({ [currentFileName]: currentFileRawContent });
+                        }
+                    });
+                } else {
+                    // Speichere einzelne Datei direkt
+                    const stateToSave = {
+                        fileName: currentFileName,
+                        timestamp: new Date().getTime(),
+                        folderPath: currentFolderPath || '',
+                        fileContents: fileContents,
+                        files: currentFiles.map(file => ({
+                            name: file.name,
+                            path: file.webkitRelativePath || ''
+                        }))
+                    };                    
+                    localStorage.setItem('markdownViewerState', JSON.stringify(stateToSave));
+                    if (!silent) showToast('Datei wurde im Browser-Cache gespeichert.', 'success');
+                    
+                    // Update cached indicator in the file list
+                    updateFileListCacheIndicators(fileContents);
+                }
+            }
+        }
+        
+        // Hilfsfunktion zur Gewährleistung der Cache-Konsistenz
+        function updateCacheAndLocalStorage(fileName, content, silent = true) {
+            // Update the file object's cached content
+            if (currentFiles && currentFiles.length > 0) {
+                const fileObj = currentFiles.find(file => file.name === fileName);
+                if (fileObj) {
+                    fileObj.cachedContent = content;
+                }
+            }
+            
+            // Save to localStorage
+            if (fileName && content) {
+                // Get existing state if available
+                let fileContents = {};
+                try {
+                    const existingState = JSON.parse(localStorage.getItem('markdownViewerState'));
+                    if (existingState && existingState.fileContents) {
+                        fileContents = existingState.fileContents;
+                    }
+                } catch (error) {
+                    console.error('Error reading existing cache state:', error);
+                }
+                
+                // Update with current file content
+                fileContents[fileName] = content;
+                
+                // Create the state object
                 const stateToSave = {
                     fileName: currentFileName,
-                    content: currentFileRawContent,
                     timestamp: new Date().getTime(),
-                    // Speichern der Ordnerinformationen, falls vorhanden
                     folderPath: currentFolderPath || '',
-                    // Speichern der Dateiliste, wenn ein Ordner geladen wurde
-                    files: currentFiles.length > 1 ? currentFiles.map(file => ({
+                    fileContents: fileContents,
+                    files: currentFiles.map(file => ({
                         name: file.name,
-                        // Nur die wichtigsten Informationen speichern
                         path: file.webkitRelativePath || ''
-                    })) : []
+                    }))
                 };
+                
+                // Save to localStorage
                 localStorage.setItem('markdownViewerState', JSON.stringify(stateToSave));
+                
+                // Show notification if not silent
+                if (!silent) {
+                    showToast('Cache aktualisiert.', 'success');
+                }
+                
+                // Update UI indicators
+                updateFileListCacheIndicators(fileContents);
             }
+        }
+        
+        // Function to update the cached indicators in the file list
+        function updateFileListCacheIndicators(fileContents) {
+            const items = fileList.querySelectorAll('li');
+            items.forEach(item => {
+                const fileName = item.textContent.trim();
+                if (fileContents[fileName]) {
+                    item.classList.add('cached');
+                } else {
+                    item.classList.remove('cached');
+                }
+            });
         }        function loadStateFromLocalStorage() {
             const savedState = localStorage.getItem('markdownViewerState');
             if (savedState) {
@@ -387,9 +600,10 @@
                     const now = new Date().getTime();
                     const sevenDays = 7 * 24 * 60 * 60 * 1000; // 7 Tage in Millisekunden
                     
-                    if (state.fileName && state.content && (now - state.timestamp < sevenDays)) {
-                        // Normalisiere Zeilenumbrüche im gespeicherten Inhalt
-                        const normalizedContent = state.content.replace(/\r\n/g, '\n');
+                    if (state.fileName && (state.content || state.fileContents) && (now - state.timestamp < sevenDays)) {
+                        // Unterstützung für altes Format (mit state.content) und neues Format (mit state.fileContents)
+                        const fileContents = state.fileContents || { [state.fileName]: state.content };
+                        const normalizedContent = (fileContents[state.fileName] || "").replace(/\r\n/g, '\n');
                         
                         currentFileName = state.fileName;
                         currentFileRawContent = normalizedContent;
@@ -424,21 +638,21 @@
                             // Initialisierung der Click-Handler für Dateiliste
                             // Wir erstellen ein Array mit File-ähnlichen Objekten, die für die Anzeige verwendet werden
                             currentFiles = state.files.map(fileInfo => {
+                                const fileName = fileInfo.name;
                                 // Wir erstellen ein erweitertes File-ähnliches Objekt mit zusätzlichen Eigenschaften
                                 return {
-                                    name: fileInfo.name,
+                                    name: fileName,
                                     webkitRelativePath: fileInfo.path || '',
                                     // Hilfsmethode, die beim Klick auf den Dateinamen aufgerufen wird
-                                    cachedContent: fileInfo.name === currentFileName ? currentFileRawContent : null,
+                                    cachedContent: fileContents[fileName] || null,
                                     // Wir emulieren die getFile-Methode für File-Handle Kompatibilität
                                     getFile: function() {
-                                        // Wenn es sich um die aktuell geladene Datei handelt, kennen wir den Inhalt
-                                        if (this.name === currentFileName) {
-                                            return Promise.resolve(new Blob([currentFileRawContent], { type: 'text/markdown' }));
+                                        // Prüfen, ob wir den Inhalt dieser Datei gespeichert haben
+                                        if (fileContents[fileName]) {
+                                            return Promise.resolve(new Blob([fileContents[fileName]], { type: 'text/markdown' }));
                                         }
                                         
-                                        // Bei anderen Dateien zeigen wir eine Nachricht an, dass der Inhalt nicht verfügbar ist
-                                        // und der Benutzer die Datei erneut laden muss
+                                        // Bei nicht gespeicherten Dateien zeigen wir eine Nachricht an
                                         return Promise.resolve(new Blob([
                                             "# Dateiinhalt nicht verfügbar\n\n" +
                                             "Der Inhalt dieser Datei wurde nicht im Browserspeicher gesichert.\n\n" +
@@ -459,7 +673,8 @@
                                 }
                             }];
                         }
-                          renderFileList();
+                          
+                        renderFileList();
                         highlightSelectedFile(currentFileName);
                         
                         // Show mobile menu when saved state is loaded on mobile
@@ -524,16 +739,17 @@
                 tuiEditor.destroy(); // Destroys the editor instance properly
                 tuiEditor = null; // Resets the editor variable
             }
-            
-            // Finale Prüfung, ob der Inhalt wirklich geändert wurde (normalisiert Zeilenumbrüche)
+              // Normalize line breaks in content
+            newContent = newContent.replace(/\r\n/g, '\n');
             const normalizedOriginal = originalFileContent.replace(/\r\n/g, '\n');
-            const normalizedNew = newContent.replace(/\r\n/g, '\n');
-            const contentChanged = normalizedNew !== normalizedOriginal && normalizedNew.trim() !== normalizedOriginal.trim();
+            const contentChanged = newContent !== normalizedOriginal && newContent.trim() !== normalizedOriginal.trim();
             
-            // Nur aktualisieren, wenn Änderungen vorgenommen wurden
+            // Always update the current content and mark it as changed if there were actual changes
             if (contentChanged) {
                 currentFileRawContent = newContent;
                 contentWasChanged = true; // Markieren, dass Änderungen vorgenommen wurden
+                  // Update cache and localStorage with the updated content, but silent to avoid duplicate toast
+                updateCacheAndLocalStorage(currentFileName, newContent, true); // silent to avoid duplicate toast
             }
             
             // Displays the (potentially updated) content as rendered Markdown
@@ -544,11 +760,10 @@
 
             editButton.textContent = 'Edit'; // Changes button text back to "Edit"
             isEditMode = false; // Resets edit mode flag
-            
-            // Wenn Inhalt geändert wurde und ein gültiger Dateiname existiert
+              // Wenn Inhalt geändert wurde und ein gültiger Dateiname existiert
             if (contentChanged && currentFileName) {
-                // Speichert den Zustand
-                saveStateToLocalStorage();
+                // Speichert den Zustand - zeige Toast-Benachrichtigung
+                saveStateToLocalStorage(false);
                 
                 // Automatischer Download der geänderten Datei nur, wenn es Änderungen gab
                 downloadModifiedFile(); // Automatically trigger download
@@ -624,14 +839,15 @@
             container.className = 'toast-container';
             document.body.appendChild(container);
             return container;
-        }
-
-        // Function to Clear Current File: Unloads the current file and resets the UI
+        }        // Function to Clear Current File: Unloads the current file and resets the UI
         function clearCurrentFile() {
             // Bestätigungsdialog anzeigen
             if (currentFileName && confirm(`Möchten Sie wirklich "${currentFileName}" entladen?`)) {
                 // Lokalen Speicher löschen
                 localStorage.removeItem('markdownViewerState');
+                
+                // Toast-Benachrichtigung zeigen
+                showToast('Alle gespeicherten Dateien wurden aus dem Browser-Speicher gelöscht.', 'info');
                 
                 // UI zurücksetzen
                 displayPlaceholder("Select a folder or a file.");
