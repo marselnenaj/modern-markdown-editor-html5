@@ -130,11 +130,7 @@
             border-radius: 8px; /* Applies rounded corners */
             transition: background-color 0.15s ease; /* Smooth transition for background color */
         }
-        .mobile-menu-button:hover {
-            background-color: rgba(60, 60, 67, 0.08); /* Light background color on hover */
-        }
-        .mobile-menu-button:active {
-        }        .mobile-menu-button svg {
+       .mobile-menu-button svg {
             width: 20px; /* Sets the width of the SVG icon */
             height: 20px; /* Sets the height of the SVG icon */
             fill: var(--ios-label-primary); /* Sets the fill color of the SVG icon */
