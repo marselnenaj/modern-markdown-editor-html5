@@ -37,14 +37,8 @@
                 if (sidebar.classList.contains('mobile-visible')) {
                     // If the sidebar is now visible, adjust content area position
                     const sidebarHeight = sidebar.getBoundingClientRect().height;
-                    
-                    // If no file is loaded, use 20vh (as requested)
-                    if (!currentFileRawContent) {
-                        document.querySelector('.content-area').style.marginTop = '20vh';
-                    } else {
-                        // If a file is loaded, use the exact height of the sidebar
-                        document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
-                    }
+                      // Always use the exact sidebar height for better responsive layout
+                    document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
                 } else {
                     // If sidebar is hidden, reset margin
                     document.querySelector('.content-area').style.marginTop = '0';
