@@ -331,6 +331,9 @@
             overflow-y: auto; /* Adds a vertical scrollbar if content overflows */
             display: flex; /* Uses Flexbox for internal layout */
             flex-direction: column; /* Arranges children vertically */
+            max-height: 50vh; /* Limit height but allow enough space for files */
+            margin-bottom: 12px; /* Add some bottom margin */
+            padding-bottom: 8px; /* Add padding at bottom */
         }
 
         /* Styling for the File List */
@@ -365,6 +368,36 @@
             background-color: var(--selected-accent-color); /* Changes background color for the selected item */
             color: var(--ios-white); /* Changes text color for the selected item */
             font-weight: 600; /* Makes text bold for the selected item */
+        }
+
+        /* Improved file list display for mobile */
+        @media (max-width: 768px) {
+            #fileList li {
+                padding: 12px 16px; /* Larger padding for better touch targets */
+                font-size: 16px; /* Slightly larger font for better readability */
+                margin-bottom: 8px; /* More space between items */
+                white-space: normal; /* Allow text wrapping for long filenames */
+                word-break: break-word; /* Ensure long words break properly */
+                line-height: 1.4; /* Slightly tighter line height */
+                border: 1px solid var(--ios-system-gray-4); /* Add subtle border */
+                background-color: var(--ios-white); /* White background for better contrast */
+            }
+            
+            /* Ensure the file browser header is visible */
+            .file-browser-header {
+                font-size: 16px;
+                margin-top: 16px;
+                margin-bottom: 12px;
+                padding-left: 16px;
+                color: var(--text-color); /* Darker color for better visibility */
+            }
+            
+            /* Adjust file browser container for better scrolling */
+            .file-browser {
+                max-height: 50vh; /* Limit height but allow enough space for files */
+                margin-bottom: 12px; /* Add some bottom margin */
+                padding-bottom: 8px; /* Add padding at bottom */
+            }
         }
 
         /* Styling of the Main Content Area (where Markdown is displayed or edited) */
@@ -847,24 +880,23 @@
             .content-area {
                 position: relative; /* For proper stacking */
                 z-index: 1; /* Lower than sidebar but still stacked */
-                transition: transform 0.3s ease-out, margin-top 0.3s ease-out; /* Smooth transition for position changes */
+                transition: margin-top 0.3s ease-out; /* Smooth transition for margin changes */
                 padding-top: 0px; /* Default top padding */
-            }            
-            .sidebar {
+            }.sidebar {
                 position: absolute; /* Absolutely positions the sidebar for overlay effect */
                 top: 0;
                 left: 0;
                 width: 100%; /* Full width */
                 z-index: 1000; /* Ensures the sidebar is on top */
                 height: auto; /* Height adjusts to content */
-                max-height: 45vh; /* Höhe begrenzen, damit mehr Platz für den Inhalt bleibt */
+                max-height: 70vh; /* Increased height to make more space for file list */
                 border-right: none; /* Removes right border */
                 border-bottom: 1px solid var(--border-color); /* Adds a bottom border */
                 background-color: var(--sidebar-background); /* Sets the background */
                 transform: translateY(-100%); /* Hides the sidebar by default outside the screen */
                 transition: transform 0.3s ease-out; /* Smooth transition for showing/hiding */
                 padding: 12px; /* Adjusts padding */
-                overflow-y: auto; /* Scrollbar erscheint bei Bedarf */
+                overflow-y: auto; /* Scrollbar appears as needed */
             }.sidebar.mobile-visible { /* Class added by JS to show the sidebar */
                 transform: translateY(0%); /* Slides the sidebar into view */
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06); /* Adds shadow when visible */
@@ -874,16 +906,11 @@
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06);
             }
             
-            /* Grundregel: Verschiebt den Content-Bereich mit dem Inhalt */
-            .sidebar.mobile-visible ~ .content-area {
-                margin-top: 20vh;
-                transition: margin-top 0.3s ease-out;
-            }
+            /* Die Margin wird jetzt dynamisch per JavaScript gesetzt */
             
             /* Zusätzlicher Fix für Inhalte */
             .sidebar.mobile-visible ~ .content-area #markdown-output:not(.placeholder) {
                 padding-top: 20px; /* Zusätzliches Padding für Inhalte */
-                margin-top: 5vh; /* Zusätzlicher Abstand, wenn echte Inhalte geladen sind */
             }
             
             /* Placeholder-Anpassung - zusätzliches Padding für bessere Lesbarkeit */

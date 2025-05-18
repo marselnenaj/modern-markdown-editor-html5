@@ -26,23 +26,35 @@
         let currentFileRawContent = ''; // Stores the raw text content of the currently displayed file
         let originalFileContent = ''; // Stores the original unchanged content to detect changes
         let currentFileName = ''; // Stores the name of the currently edited/displayed file
-        let contentWasChanged = false; // Speichert, ob der Inhalt seit dem letzten Laden geändert wurde
-
-        // Event Listener for Mobile Menu Button: Toggles sidebar visibility on mobile devices
+        let contentWasChanged = false; // Speichert, ob der Inhalt seit dem letzten Laden geändert wurde        // Event Listener for Mobile Menu Button: Toggles sidebar visibility on mobile devices
         mobileMenuButton.addEventListener('click', () => {
             const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
             mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
             sidebar.classList.toggle('mobile-visible'); // Einfaches Umschalten der Sichtbarkeit
             
-            // Zusätzliche Behandlung für geladene Inhalte
-            if (currentFileRawContent) {
-                // Wenn Inhalt geladen ist und das Menü geöffnet wird, scrolle zum Anfang des Inhalts
-                if (!isExpanded) {
-                    setTimeout(() => {
-                        window.scrollTo({top: 0, behavior: 'smooth'});
-                    }, 300);
+            // Get sidebar height to adjust content area
+            setTimeout(() => {
+                if (sidebar.classList.contains('mobile-visible')) {
+                    // If the sidebar is now visible, adjust content area position
+                    const sidebarHeight = sidebar.getBoundingClientRect().height;
+                    
+                    // If no file is loaded, use 20vh (as requested)
+                    if (!currentFileRawContent) {
+                        document.querySelector('.content-area').style.marginTop = '20vh';
+                    } else {
+                        // If a file is loaded, use the exact height of the sidebar
+                        document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
+                    }
+                } else {
+                    // If sidebar is hidden, reset margin
+                    document.querySelector('.content-area').style.marginTop = '0';
                 }
-            }
+                
+                // Smooth scroll to top when menu opens with content
+                if (currentFileRawContent && !isExpanded) {
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                }
+            }, 10); // Small timeout to ensure the sidebar toggle has applied
         });
 
         // Event Listeners for File/Folder Selection Buttons: Trigger click on hidden file input elements
@@ -60,12 +72,23 @@
                 const firstFile = files[0]; // Get first file to determine folder path
                 // Try to get a folder name from webkitRelativePath, otherwise use a generic name
                 currentFolderPath = firstFile.webkitRelativePath ? firstFile.webkitRelativePath.split('/')[0] : 'Selected Folder';
-                
-                // Update UI to display selected folder name and file browser
+                  // Update UI to display selected folder name and file browser
                 selectedFolderNameDiv.textContent = currentFolderPath;
                 selectedFolderNameDiv.style.display = 'block';
                 fileBrowserHeader.style.display = 'block';
                 renderFileList(); // Create file list in the sidebar
+                
+                // Show mobile menu when folder is loaded in mobile view
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.add('mobile-visible');
+                    mobileMenuButton.setAttribute('aria-expanded', 'true');
+                    
+                    // Adjust content area margin based on sidebar height
+                    setTimeout(() => {
+                        const sidebarHeight = sidebar.getBoundingClientRect().height;
+                        document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
+                    }, 10);
+                }
 
                 // Try to display the first found Markdown file, otherwise show a message
                 if (currentFiles.length > 0) {
@@ -88,10 +111,22 @@
                 currentFiles = [file]; // Store file in currentFiles array
                 currentFolderHandle = null; // Reset folder handle
                 currentFileHandle = null; // Reset file handle
-                currentFolderPath = ''; // No folder path for single file
-                selectedFolderNameDiv.style.display = 'none'; // Hide folder name display
+                currentFolderPath = ''; // No folder path for single file                selectedFolderNameDiv.style.display = 'none'; // Hide folder name display
                 fileBrowserHeader.style.display = 'block'; // Show file browser header (for the single file)
                 renderFileList(); // Display single file in the list
+                
+                // Show mobile menu when a file is loaded in mobile view
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.add('mobile-visible');
+                    mobileMenuButton.setAttribute('aria-expanded', 'true');
+                    
+                    // Adjust content area margin based on sidebar height
+                    setTimeout(() => {
+                        const sidebarHeight = sidebar.getBoundingClientRect().height;
+                        document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
+                    }, 10);
+                }
+                
                 await displayFileContent(file, file.name); // Display its content
                     }
         });
@@ -158,13 +193,18 @@
                         markdownOutput.style.display = 'block'; // Shows Markdown output area
                         wysiwygEditorContainer.style.display = 'none'; // Hides WYSIWYG editor
                         if (tuiEditor) { tuiEditor.destroy(); tuiEditor = null; } // Cleans up TUI editor instance
-                    }
-                    markdownOutput.classList.remove('placeholder'); // Removes placeholder class when content is loaded
-                    
-                    // Wenn wir auf Mobilgeräten sind, sicherstellen, dass das Menü geschlossen wird und der Inhalt richtig angezeigt wird
-                    if (window.innerWidth <= 768 && sidebar.classList.contains('mobile-visible')) {
-                        sidebar.classList.remove('mobile-visible');
-                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    }                    markdownOutput.classList.remove('placeholder'); // Removes placeholder class when content is loaded
+                      // Wenn wir auf Mobilgeräten sind, sicherstellen, dass das Menü geöffnet bleibt und der Inhalt richtig angezeigt wird
+                    if (window.innerWidth <= 768) {
+                        // Keep the sidebar visible on mobile and adjust content margin
+                        sidebar.classList.add('mobile-visible');
+                        mobileMenuButton.setAttribute('aria-expanded', 'true');
+                        
+                        // Adjust content area margin based on sidebar height
+                        setTimeout(() => {
+                            const sidebarHeight = sidebar.getBoundingClientRect().height;
+                            document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
+                        }, 10);
                     }
                 };
                 // Defines what happens if an error occurs while reading the file
@@ -419,9 +459,20 @@
                                 }
                             }];
                         }
-                        
-                        renderFileList();
+                          renderFileList();
                         highlightSelectedFile(currentFileName);
+                        
+                        // Show mobile menu when saved state is loaded on mobile
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.add('mobile-visible');
+                            mobileMenuButton.setAttribute('aria-expanded', 'true');
+                            
+                            // Adjust content area margin based on sidebar height
+                            setTimeout(() => {
+                                const sidebarHeight = sidebar.getBoundingClientRect().height;
+                                document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
+                            }, 10);
+                        }
                         
                         return true; // Erfolgreich geladen
                     }
@@ -621,8 +672,7 @@
         }
           // Event Listener for Clear Button
         clearButton.addEventListener('click', clearCurrentFile);
-        
-        // Hilfsfunktion zur Überprüfung und Anzeige des mobilen Menüs
+          // Hilfsfunktion zur Überprüfung und Anzeige des mobilen Menüs
         function checkAndShowMobileMenu() {
             const isMobileView = window.innerWidth <= 768;
             
@@ -630,6 +680,11 @@
             if (isMobileView && !currentFileRawContent) {
                 sidebar.classList.add('mobile-visible');
                 mobileMenuButton.setAttribute('aria-expanded', 'true');
+                
+                // Set margin-top for content area to 20vh when no file is loaded
+                setTimeout(() => {
+                    document.querySelector('.content-area').style.marginTop = '20vh';
+                }, 10);
             }
         }
         
