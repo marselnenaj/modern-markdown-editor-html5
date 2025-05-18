@@ -134,7 +134,6 @@
             background-color: rgba(60, 60, 67, 0.08); /* Light background color on hover */
         }
         .mobile-menu-button:active {
-            background-color: rgba(60, 60, 67, 0.12);  /* Slightly darker background on active/click */
         }        .mobile-menu-button svg {
             width: 20px; /* Sets the width of the SVG icon */
             height: 20px; /* Sets the height of the SVG icon */
