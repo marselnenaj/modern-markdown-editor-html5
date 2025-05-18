@@ -586,28 +586,78 @@
              overflow: hidden; /* Prevent outer scrolling, let Toast UI handle scrolling internally */
         }
         
-        /* Toast UI editor specific fixes for mobile */
-        .toastui-editor-defaultUI {
-             height: 100% !important; /* Force full height */
+        /* Toast notification container */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 300px;
         }
         
-        .toastui-editor-defaultUI-toolbar {
-             flex-shrink: 0; /* Prevents toolbar from shrinking */
+        /* Toast notification styling */
+        .toast {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            animation: fade-in 0.3s ease-in, fade-out 0.3s ease-out 2.7s forwards;
+            font-family: var(--font-family-apple);
+            font-size: 14px;
         }
         
-        .toastui-editor-main {
-             min-height: 100px; /* Minimum height for editor main section */
-             flex-grow: 1; /* Allows it to expand */
+        /* Success toast */
+        .toast.success {
+            background-color: rgba(52, 199, 89, 0.9); /* iOS success green with slight transparency */
         }
         
-        .toastui-editor-ww-container {
-             min-height: 100px !important; /* Minimum height for WYSIWYG container */
+        /* Error toast */
+        .toast.error {
+            background-color: rgba(255, 59, 48, 0.9); /* iOS error red with slight transparency */
+        }
+        
+        /* Info toast */
+        .toast.info {
+            background-color: rgba(0, 122, 255, 0.9); /* iOS blue with slight transparency */
+        }
+        
+        /* Toast animations */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fade-out {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
         }
 
         /* Download button styling */
         .download-button {
             background-color: var(--ios-blue); /* Uses iOS blue for the download button */
             margin-right: 8px; /* Space between buttons */
+            border: 1px solid
+        }
+          /* Clear button styling */
+        .clear-button {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid var(--ios-system-gray-3); /* Light gray border */
+            margin-right: 8px; /* Space between buttons */
+        }
+        
+        /* Hover state for Clear button */
+        .clear-button:hover {
+            background-color: #E0321C; /* Darker red on hover */
+            color: #fff;
+        }
+        
+        /* Active (pressed) state for Clear button */
+        .clear-button:active {
+            background-color: #CC2E1A; /* Even darker red when pressed */
+            transform: scale(0.97) translateY(0px); /* Slight reduction in size */
         }
         
         /* Media queries for mobile responsiveness */
@@ -618,11 +668,53 @@
             
             #wysiwyg-editor-container {
                 min-height: 300px; /* Ensure editor has enough height on mobile */
-                max-height: 80vh; /* Limit height on mobile to prevent it from taking too much space */
+                max-height: 95vh; /* Limit height on mobile to prevent it from taking too much space */
             }
             
-            .toastui-editor-main {
-                min-height: 200px; /* Ensure editor has enough space on mobile */
+            .toast-container {
+                bottom: 10px; /* Adjust toast container position on mobile */
+                right: 10px;
+            }
+            
+            .toast {
+                font-size: 12px; /* Adjust toast font size on mobile */
+                padding: 10px 14px; /* Adjust toast padding on mobile */
+            }
+            
+            .toast.success {
+                background-color: rgba(52, 199, 89, 0.8); /* Adjust success toast color on mobile */
+            }
+            
+            .toast.error {
+                background-color: rgba(255, 59, 48, 0.8); /* Adjust error toast color on mobile */
+            }
+            
+            .toast.info {
+                background-color: rgba(0, 122, 255, 0.8); /* Adjust info toast color on mobile */
+            }
+            
+            .toast-container .toast {
+                margin-top: 8px; /* Adjust margin between toasts on mobile */
+            }
+
+            .window-title-bar {
+                border-top-left-radius: 0; /* Removes top left border radius */
+                border-top-right-radius: 0; /* Removes top right border radius */
+                padding: 0 10px; /* Adjusts padding */
+                position: fixed; /* Fix the title bar at the top */
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 2000; /* Ensure it's above everything else */
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Add subtle shadow for depth */
+            }
+            
+            /* Add additional space at the top of main-content-wrapper to account for fixed header */
+            .main-content-wrapper {
+                flex-direction: column; /* Stacks sidebar and content vertically */
+                position: relative; /* For positioning the sidebar */
+                height: calc(100% - var(--title-bar-height)); /* Adjusts height */
+                margin-top: var(--title-bar-height); /* Adds space for the fixed title bar */
             }
         }
 
@@ -747,14 +839,17 @@
                 width: 10px;
                 height: 10px;
                 margin-right: 6px;
-            }
-
-            .main-content-wrapper {
+            }            .main-content-wrapper {
                 flex-direction: column; /* Stacks sidebar and content vertically */
                 position: relative; /* For positioning the sidebar */
                 height: calc(100% - var(--title-bar-height)); /* Adjusts height */
-            }
-
+            }            /* Styling for the content area in mobile view */
+            .content-area {
+                position: relative; /* For proper stacking */
+                z-index: 1; /* Lower than sidebar but still stacked */
+                transition: transform 0.3s ease-out, margin-top 0.3s ease-out; /* Smooth transition for position changes */
+                padding-top: 0px; /* Default top padding */
+            }            
             .sidebar {
                 position: absolute; /* Absolutely positions the sidebar for overlay effect */
                 top: 0;
@@ -762,18 +857,38 @@
                 width: 100%; /* Full width */
                 z-index: 1000; /* Ensures the sidebar is on top */
                 height: auto; /* Height adjusts to content */
-                max-height: 50vh; /* Limits the maximum height */
+                max-height: 45vh; /* Höhe begrenzen, damit mehr Platz für den Inhalt bleibt */
                 border-right: none; /* Removes right border */
                 border-bottom: 1px solid var(--border-color); /* Adds a bottom border */
                 background-color: var(--sidebar-background); /* Sets the background */
                 transform: translateY(-100%); /* Hides the sidebar by default outside the screen */
                 transition: transform 0.3s ease-out; /* Smooth transition for showing/hiding */
                 padding: 12px; /* Adjusts padding */
-            }
-
-            .sidebar.mobile-visible { /* Class added by JS to show the sidebar */
+                overflow-y: auto; /* Scrollbar erscheint bei Bedarf */
+            }.sidebar.mobile-visible { /* Class added by JS to show the sidebar */
                 transform: translateY(0%); /* Slides the sidebar into view */
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06); /* Adds shadow when visible */
+            }            /* Mobile Menu & Content-Positionierung - VERBESSERT */
+            .sidebar.mobile-visible {
+                transform: translateY(0%); /* Zeigt die Sidebar an */
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06);
+            }
+            
+            /* Grundregel: Verschiebt den Content-Bereich mit dem Inhalt */
+            .sidebar.mobile-visible ~ .content-area {
+                margin-top: 20vh;
+                transition: margin-top 0.3s ease-out;
+            }
+            
+            /* Zusätzlicher Fix für Inhalte */
+            .sidebar.mobile-visible ~ .content-area #markdown-output:not(.placeholder) {
+                padding-top: 20px; /* Zusätzliches Padding für Inhalte */
+                margin-top: 5vh; /* Zusätzlicher Abstand, wenn echte Inhalte geladen sind */
+            }
+            
+            /* Placeholder-Anpassung - zusätzliches Padding für bessere Lesbarkeit */
+            .sidebar.mobile-visible ~ .content-area #markdown-output.placeholder {
+                padding-top: 20px;
             }
             
             .sidebar-header { /* Adjusts the sidebar header for mobile devices */
@@ -799,12 +914,13 @@
                 width: 90%; /* Buttons take 90% of the available width */
                 margin: 0 auto; /* Centers buttons horizontally */
             }.content-header { /* Adjusts the content header for mobile devices */
-                padding: 10px;
+                padding: 5px 10px; /* Reduziertes Padding oben und unten */
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
                 height: auto;
+                margin-bottom: 0; /* Kein Abstand nach unten */
             }
             
             #contentHeaderText { /* Adjusts the content header text for mobile devices */
@@ -833,7 +949,8 @@
             }
             #markdown-output, 
             #wysiwyg-editor-container { /* Adjusts padding for content areas on mobile */
-                padding: 15px;
+                padding: 10px 15px 15px 15px; /* Reduziertes Padding oben */
+                margin-top: 0; /* Kein zusätzlicher Abstand oben */
                 /* min-height: 300px; */ /* REMOVED: Temporary diagnostic */
             }
             #wysiwyg-editor-container .toastui-editor-contents { /* Adjusts TUI editor font size for mobile */
@@ -906,10 +1023,11 @@
         #markdown-output h1 {
             font-size: 28px;
             font-weight: 600;
-            margin: 1.2em 0 0.8em;
+            margin: 0em 0 0.8em;
             padding-bottom: 0.2em;
             border-bottom: 1px solid var(--ios-system-gray-5);
         }
+
         
         #markdown-output h2 {
             font-size: 22px;
@@ -1058,4 +1176,30 @@
             border-radius: 12px;
             margin: 1em 0;
             box-shadow: 0 1px 1px rgba(26, 26, 26, 0.12), 0 1px 2px rgba(47, 47, 47, 0.12);
+        }
+
+        /* Specific styling for placeholder text to make it more visible */
+        #markdown-output.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--ios-label-secondary);
+            font-size: 17px;
+            height: 50px;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: padding-top 0.3s ease-out; /* Smooth transition for padding changes */
+        }        /* Media query adjustment for placeholder on mobile */
+        @media (max-width: 768px) {
+            #markdown-output.placeholder {
+                font-size: 16px;
+                padding: 15px;
+            }
+            
+            /* When mobile menu is open and no content is loaded */
+            .sidebar.mobile-visible ~ .content-area #markdown-output.placeholder {
+                margin-top: 20px; /* Kleinerer Abstand zwischen Menü und Text */
+                padding-top: 0px; /* Reduziertes zusätzliches Polsterung oben */
+            }
         }

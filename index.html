@@ -57,10 +57,10 @@
                 <!-- Content Area: Main area for displaying Markdown or editor -->
                 <main class="content-area">
                     <!-- Content Header: Displays the current file name and action buttons -->
-                    <div class="content-header" id="contentHeaderContainer">                        <!-- Displays the name of the currently selected file or a placeholder -->
-                        <div id="contentHeaderText">No file selected</div>
+                    <div class="content-header" id="contentHeaderContainer">                        <!-- Displays the name of the currently selected file or a placeholder -->                        <div id="contentHeaderText">No file selected</div>
                         <!-- Wrapper for header buttons (e.g., Edit/Save) -->
                         <div> 
+                            <button id="clearButton" class="header-button clear-button" style="display: none;">Clear</button> <!-- Button to clear/unload content -->
                             <button id="downloadButton" class="header-button download-button" style="display: none;">Download</button> <!-- Button to download modified content -->
                             <button id="editButton" class="header-button" style="display: none;">Edit</button> <!-- Button to toggle edit/save mode -->
                         </div>
@@ -88,10 +88,10 @@
         </footer>
     </div>
 
-    <!-- Hidden file input elements for selecting folders and files -->
-    <input type="file" id="folderInput" webkitdirectory directory style="display: none;" /> <!-- For selecting directories (folders) -->
-    <input type="file" id="singleFileInput" accept=".md, .txt, .markdown" style="display: none;" /> <!-- For selecting individual files (Markdown, Text) -->
-
-    <script src="script.js"></script>
+    <!-- Hidden file input elements for selecting folders and files -->    <input type="file" id="folderInput" webkitdirectory directory style="display: none;" /> <!-- For selecting directories (folders) -->
+    <input type="file" id="singleFileInput" accept=".md, .txt, .markdown" style="display: none;" /> <!-- For selecting individual files (Markdown, Text) -->    <script src="script.js"></script>
+    
+    <!-- Toast notification container -->
+    <div class="toast-container" id="toastContainer"></div>
 </body>
 </html>
