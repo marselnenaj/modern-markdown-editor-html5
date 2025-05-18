@@ -1,0 +1,1061 @@
+/* CSS Variables for consistent styling throughout the project */
+        :root {
+            /* Apple/iOS style system font */
+            --font-family-apple: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            
+            /* iOS Blue Color Palette */
+            --ios-blue: #007AFF; /* Standard iOS blue */
+            --ios-blue-hover: #0056b3; /* Darker blue for hover states */
+            --ios-blue-selected: #006adc; /* Slightly darker blue for selected states */
+
+            /* iOS Gray Tones (Light Mode) - Mimics iOS system gray colors */
+            --ios-system-gray-6: #f2f2f7; /* Primary background for grouped content */
+            --ios-system-gray-5: #e5e5ea; /* Secondary background for grouped content */
+            --ios-system-gray-4: #d1d1d6; /* Tertiary fill, separators */
+            --ios-system-gray-3: #c7c7cc; /* Quaternary fill */
+            --ios-system-gray-2: #aeaeb2; /* Placeholder text, secondary labels */
+            --ios-system-gray-1: #8e8e93; /* Tertiary labels */
+
+            /* iOS Text Colors (Light Mode) */
+            --ios-label-primary: #000000; /* Primary text color (black) */
+            --ios-label-secondary: rgba(60, 60, 67, 0.6); /* Secondary text color with transparency */
+            --ios-label-tertiary: rgba(60, 60, 67, 0.3); /* Tertiary text color with transparency */
+            --ios-label-quaternary: rgba(60, 60, 67, 0.18); /* Quaternary text color with transparency */
+
+            --ios-white: #ffffff; /* Pure white */
+            
+            /* Application Color Scheme */
+            --background-color: var(--ios-system-gray-6); /* General page background color */
+            --app-background-color: var(--ios-white); /* Background color of the main container */
+            --sidebar-background: var(--ios-system-gray-6); /* Background color for the sidebar */
+            --content-background: var(--ios-white); /* Background color for the content area */
+            
+            /* Text Color Variables */
+            --text-color: var(--ios-label-primary); /* Default text color */
+            --text-color-secondary: var(--ios-label-secondary); /* Secondary text color */
+            --text-color-placeholder: var(--ios-system-gray-2); /* Color for placeholder text */
+
+            /* Border and Separator Colors */
+            --border-color: var(--ios-system-gray-4); /* Default border color */
+            --separator-color: var(--ios-system-gray-5); /* Color for separators */            /* Accent Colors */
+            --accent-color: var(--ios-blue); /* Primary accent color */
+            --hover-accent-color: var(--ios-blue-hover); /* Accent color for hover states */
+            --selected-accent-color: var(--ios-blue-selected); /* Accent color for selected elements */
+
+            /* Corner Radius Variables */
+            --border-radius-standard: 8px; /* Standard iOS corner radius */
+            --border-radius-large: 12px; /* For larger elements like the app container */
+            
+            /* Shadow Variables */
+            --box-shadow-subtle: 0 1px 2px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.03); /* Subtle shadow for elements */
+            --box-shadow-card: 0 4px 10px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(0,0,0,0.06); /* Shadow for card-like elements, similar to a window */
+
+            /* Layout Size Variables */
+            --sidebar-width: 330px; /* Width of the sidebar */
+            --header-height: 50px; /* Height of the content header */
+            --title-bar-height: 38px; /* Height of the macOS-like title bar */
+            --app-max-width: 1400px; /* Maximum width of the application container */
+            --app-padding: 16px; /* Padding around the app container when not in full-screen mode */            /* UI Element Size Variables */
+            --button-padding-y: 12px; /* Vertical padding for buttons - slightly reduced */
+            --button-padding-x: 10px; /* Horizontal padding for buttons - reduced for better text rendering */
+            --button-font-size: 15px; /* Font size for buttons - reduced for better fit */
+            --list-item-padding-y: 14px; /* Vertical padding for list items */
+            --list-item-padding-x: 18px; /* Horizontal padding for list items */
+            --list-item-font-size: 17px; /* Font size for list items */
+
+            /* Improved Button Aesthetics */
+            --button-shadow-idle: 0 2px 4px rgba(0,0,0,0.05), 0 1px 1px rgba(0,0,0,0.03); /* Shadow for buttons in idle state */
+            --button-shadow-hover: 0 4px 8px rgba(0,0,0,0.07), 0 2px 3px rgba(0,0,0,0.04); /* Shadow for buttons on hover */
+            --button-shadow-active: inset 0 1px 2px rgba(0,0,0,0.1); /* Inner shadow for buttons in active/pressed state */
+            --button-text-shadow: 0 1px 0px rgba(0,0,0,0.1); /* Subtle text shadow for button text */
+        }
+
+        /* General Body Styling */
+        body {
+            font-family: var(--font-family-apple); /* Sets the default font for the page */
+            margin: 0; /* Removes the default browser margin */
+            background-color: var(--background-color); /* Sets the page background color */
+            color: var(--text-color); /* Sets the default text color */
+            line-height: 1.5; /* Adjusts line height for better readability */
+            display: flex; /* Uses Flexbox for layout */
+            flex-direction: column; /* Arranges children vertically */
+            justify-content: flex-start; /* Aligns content vertically at the top */
+            align-items: center; /* Centers content horizontally */
+            min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+            padding: 0; /* No padding around the body content */
+            box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+            -webkit-font-smoothing: antialiased; /* Improves font rendering in WebKit browsers */
+            -moz-osx-font-smoothing: grayscale; /* Improves font rendering in Firefox for macOS */
+        }
+
+        /* Styling of the Main Application Container */
+        .app-container {
+            width: 100%; /* Takes the full width of the parent element */
+            max-width: var(--app-max-width); /* Limits the maximum width */
+            min-height: 400px; /* Minimum height for the container */
+            display: flex; /* Uses Flexbox for internal layout */
+            flex-direction: column; /* Arranges children vertically */
+            background-color: var(--app-background-color); /* Sets the background color */
+            border-radius: var(--border-radius-large); /* Applies rounded corners */
+            box-shadow: var(--box-shadow-card); /* Adds a card-like shadow */
+            overflow: hidden; /* Hides content that overflows the container */
+            border: 1px solid var(--ios-system-gray-4); /* Adds a border */
+            flex-grow: 1; /* Allows the container to take up available space */
+        }
+
+        /* Styling of the macOS-like Window Title Bar */
+        .window-title-bar {
+            height: var(--title-bar-height); /* Sets the height of the title bar */
+            background-color: var(--ios-system-gray-5); /* Sets the background color */
+            display: flex; /* Uses Flexbox for internal layout */
+            align-items: center; /* Aligns elements vertically centered */
+            justify-content: space-between; /* Distributes space between elements */
+            padding: 0 12px; /* Adds horizontal padding */
+            box-sizing: border-box; /* Includes padding in the element's total width and height */
+            border-bottom: 1px solid var(--ios-system-gray-4); /* Adds a bottom border */
+            flex-shrink: 0; /* Prevents the title bar from shrinking */
+            border-top-left-radius: var(--border-radius-large); /* Rounds the top-left corner */
+            border-top-right-radius: var(--border-radius-large); /* Rounds the top-right corner */
+            position: relative; /* Sets the positioning context for potential child elements */
+        }
+
+        /* Styling of the Mobile Menu Button (Hamburger Icon) */
+        .mobile-menu-button {
+            display: none; /* Hidden by default, shown in mobile view via media query */
+            background: transparent; /* Transparent background */
+            border: none; /* No border */
+            cursor: pointer; /* Changes cursor on hover */
+            padding: 8px; /* Adds padding */
+            margin-left: auto; /* Pushes the button to the right */
+            border-radius: 8px; /* Applies rounded corners */
+            transition: background-color 0.15s ease; /* Smooth transition for background color */
+        }
+        .mobile-menu-button:hover {
+            background-color: rgba(60, 60, 67, 0.08); /* Light background color on hover */
+        }
+        .mobile-menu-button:active {
+            background-color: rgba(60, 60, 67, 0.12);  /* Slightly darker background on active/click */
+        }        .mobile-menu-button svg {
+            width: 20px; /* Sets the width of the SVG icon */
+            height: 20px; /* Sets the height of the SVG icon */
+            fill: var(--ios-label-primary); /* Sets the fill color of the SVG icon */
+        }
+
+        /* Container for the Traffic Lights (macOS Window Controls) */
+        .traffic-lights {
+            display: flex; /* Uses Flexbox for layout */
+            align-items: center; /* Aligns elements vertically centered */
+        }
+
+        /* Styling for Individual Traffic Lights */
+        .traffic-light {
+            width: 12px; /* Sets the width */
+            height: 12px; /* Sets the height */
+            border-radius: 50%; /* Makes it circular */
+            margin-right: 8px; /* Adds spacing to the right */
+            box-sizing: border-box; /* Includes the border in the element's total width and height */
+        }
+
+        /* Specific Colors for Each Traffic Light */
+        .traffic-light.red { background-color: #FF5F57; border: 0.5px solid #E0443E; } /* Red light with border */
+        .traffic-light.yellow { background-color: #FEBC2E; border: 0.5px solid #DFA023; } /* Yellow light with border */
+        .traffic-light.green { background-color: #28C840; border: 0.5px solid #1AA12C; } /* Green light with border */
+        
+        /* Styling for the Window Title Text */
+        .window-title-text {
+            font-family: var(--font-family-apple); /* Sets the font */
+            font-size: 13px; /* Sets the font size */
+            font-weight: 500; /* Sets the font weight */
+            color: var(--ios-label-primary); /* Sets the text color */
+            text-align: center; /* Centers the text */
+            flex-grow: 1; /* Allows the text to take up available space */
+            line-height: var(--title-bar-height); /* Centers text vertically within the title bar */
+            white-space: nowrap; /* Prevents text wrapping */
+            overflow: hidden; /* Hides overflowing text */
+            text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
+            padding: 0 50px; /* Adds horizontal padding to prevent overlap with controls */
+        }
+
+        /* Wrapper for the Main Content Area (Sidebar and Content) */
+        .main-content-wrapper {
+            display: flex; /* Uses Flexbox for layout */
+            flex-direction: row; /* Arranges children horizontally (sidebar, content) */
+            flex-grow: 1; /* Allows the wrapper to take up available vertical space */
+            overflow: hidden; /* Hides overflowing content */
+        }
+
+        /* Styling of the Sidebar */
+        .sidebar {
+            width: var(--sidebar-width); /* Sets the width of the sidebar */
+            background-color: var(--sidebar-background); /* Sets the background color */
+            border-right: 1px solid var(--border-color); /* Adds a right border */
+            padding: 16px; /* Adds padding */
+            box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+            display: flex; /* Uses Flexbox for internal layout */
+            flex-direction: column; /* Arranges children vertically */
+            overflow-y: auto; /* Adds a vertical scrollbar if content overflows */
+            flex-shrink: 0; /* Prevents the sidebar from shrinking */
+            position: static; /* Default positioning */
+            transform: none; /* No transformation by default */
+            transition: none; /* No transition by default */
+            z-index: auto; /* Default stacking order */
+        }
+        
+        /* Styling of the Sidebar Header (e.g., "Explorer") */
+        .sidebar-header {
+            font-size: 18px; /* Sets the font size */
+            font-weight: 600; /* Sets the font weight */
+            margin-bottom: 20px; /* Adds space below the header */
+            padding-top: 10px; /* Adds padding at the top */
+            padding-bottom: 15px; /* Adds padding at the bottom */
+            color: var(--text-color); /* Sets the text color */
+            border-bottom: 1px solid var(--separator-color); /* Adds a bottom border as a separator */
+        }
+
+        /* Area for Folder and File Selection Buttons */
+        .folder-selection-area {
+            display: grid; /* Uses CSS Grid for layout */
+            grid-template-columns: 1fr 1fr; /* Two columns of equal width */
+            grid-template-rows: auto auto; /* Rows adjust to content height */
+            gap: 12px; /* Space between grid items */
+            margin-bottom: 24px; /* Space below this area */
+        }        /* Styling for Folder and Single File Input Buttons */
+        #folderInputButton,
+        #singleFileInputButton {
+            color: var(--ios-white); /* Sets the text color */
+            background-color: var(--accent-color); /* macOS blue tone */
+            border: none; /* No borders in macOS style */
+            padding: var(--button-padding-y) 12px; /* Balanced padding */
+            border-radius: 6px; /* Typical macOS button radius */
+            cursor: pointer; /* Indicates clickable */
+            font-family: var(--font-family-apple); /* Apple system font */
+            font-size: 13px; /* macOS standard font size */
+            font-weight: 500; /* Medium weight for macOS buttons */
+            letter-spacing: 0.2px; /* Slight letter spacing */
+            transition: all 0.2s ease; /* Smooth transition */
+            width: 100%; /* Full width in container */
+            box-sizing: border-box; /* Correct size calculation */
+            text-align: center; /* Centered text */
+            white-space: normal; /* Allows wrapping if necessary */
+            min-height: 32px; /* Typical macOS button height */
+            display: flex; /* Flexbox for centering */
+            align-items: center; /* Vertical centering */
+            justify-content: center; /* Horizontal centering */
+            line-height: 1.2; /* Standard line height */
+            box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1); /* Subtle macOS-style shadow */
+            position: relative; /* For icon positioning */
+            overflow: hidden; /* Prevents overflow */
+        }
+        
+        /* Hover State for Buttons */
+        #folderInputButton:hover,
+        #singleFileInputButton:hover {
+            background-color: var(--hover-accent-color); /* Slightly darker blue on hover */
+            opacity: 0.9; /* Slight transparency for hover effect */
+        }
+        
+        /* Active (Pressed) State for Buttons */
+        #folderInputButton:active,
+        #singleFileInputButton:active {
+            background-color: var(--selected-accent-color); /* Darker blue when pressed */
+            transform: scale(0.98); /* Minimal scaling for feedback */
+            opacity: 1.0; /* Full opacity when pressed */
+        }
+          /* Grid Placement for the Folder Selection Button */
+        #folderInputButton {
+            grid-column: 1 / 2; /* Spans the first column */
+            grid-row: 1 / 2; /* Spans the first row */
+        }
+        
+        /* Grid Placement for the Single File Selection Button */
+        #singleFileInputButton {
+            grid-column: 2 / 3; /* Spans the second column */
+            grid-row: 1 / 2; /* Spans the first row */
+        }
+        
+        /* Icons for the Buttons */
+        #folderInputButton::before,
+        #singleFileInputButton::before {
+            content: ''; /* Required for pseudo-elements */
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            vertical-align: middle;
+        }
+        
+        /* Folder Icon */
+        #folderInputButton::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z'/%3E%3C/svg%3E");
+        }
+        
+        /* File Icon */
+        #singleFileInputButton::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z'/%3E%3Cpath d='M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z'/%3E%3C/svg%3E");
+        }
+
+        /* Styling for the Display of the Selected Folder Name */
+        #selectedFolderName {
+            grid-column: 1 / -1; /* Spans all columns */
+            grid-row: 2 / 3; /* Spans the second row */
+            font-size: 14px; /* Sets the font size */
+            color: var(--text-color-secondary); /* Sets the text color */
+            text-align: center; /* Centers the text */
+            word-break: break-all; /* Allows long folder names to wrap */
+            padding: 8px 10px; /* Adds padding */
+            background-color: var(--ios-system-gray-5); /* Sets the background color */
+            border-radius: calc(var(--border-radius-standard) - 2px); /* Slightly smaller corner radius */
+            margin-top: 0; /* Removes top margin */
+            line-height: 1.4; /* Adjusts line height */
+        }
+
+        /* Styling for the Header of the File Browser Area (e.g., "Files") */
+        .file-browser-header {
+            font-family: var(--font-family-apple); /* Sets the font */
+            font-size: 14px; /* Sets the font size */
+            font-weight: 600; /* Sets the font weight */
+            color: var(--text-color-secondary); /* Sets the text color */
+            margin-top: 24px; /* Adds space above */
+            margin-bottom: 12px; /* Adds space below */
+            padding-left: var(--list-item-padding-x); /* Aligns with list item padding */
+            text-transform: uppercase; /* Converts text to uppercase */
+            letter-spacing: 0.8px; /* Adds letter spacing */
+        }
+
+        /* Styling for the File Browser Container */
+        .file-browser {
+            flex-grow: 1; /* Allows the browser to take up available vertical space */
+            overflow-y: auto; /* Adds a vertical scrollbar if content overflows */
+            display: flex; /* Uses Flexbox for internal layout */
+            flex-direction: column; /* Arranges children vertically */
+        }
+
+        /* Styling for the File List */
+        #fileList {
+            list-style: none; /* Removes default list styling (bullets) */
+            padding: 0; /* Removes default padding */
+            margin: 0; /* Removes default margin */
+            flex-grow: 1; /* Allows the list to take up available space */
+        }
+
+        /* Styling for Individual File List Items */
+        #fileList li {
+            padding: var(--list-item-padding-y) var(--list-item-padding-x); /* Sets padding using variables */
+            cursor: pointer; /* Changes cursor on hover */
+            border-radius: var(--border-radius-standard); /* Applies rounded corners */
+            margin-bottom: 6px; /* Adds space below each item */
+            font-size: var(--list-item-font-size); /* Sets font size using a variable */
+            font-family: var(--font-family-apple); /* Sets the font */
+            color: var(--text-color); /* Sets the text color */
+            transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease; /* Smooth transitions */
+            white-space: nowrap; /* Prevents text wrapping */
+            overflow: hidden; /* Hides overflowing text */
+            text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
+            line-height: 1.45; /* Adjusts line height */
+        }
+
+        /* Hover State for File List Items */
+        #fileList li:hover {
+            background-color: var(--ios-system-gray-5); /* Changes background color on hover */
+        }        /* Selected State for File List Items */
+        #fileList li.selected {
+            background-color: var(--selected-accent-color); /* Changes background color for the selected item */
+            color: var(--ios-white); /* Changes text color for the selected item */
+            font-weight: 600; /* Makes text bold for the selected item */
+        }
+
+        /* Styling of the Main Content Area (where Markdown is displayed or edited) */
+        .content-area {
+            flex-grow: 1; /* Allows the content area to take up available space */
+            background-color: var(--content-background); /* Sets the background color */
+            padding: 0; /* No padding by default, handled by child elements */
+            overflow-y: auto; /* Adds a vertical scrollbar if content overflows */
+            display: flex; /* Uses Flexbox for internal layout */
+            flex-direction: column; /* Arranges children vertically */
+        }
+        
+        /* Header within the Content Area (displays file name and edit button) */
+        .content-header {
+            height: var(--header-height); /* Sets the height */
+            display: flex; /* Uses Flexbox for layout */
+            align-items: center; /* Aligns elements vertically centered */
+            justify-content: space-between; /* Distributes space between elements */
+            padding: 0 16px; /* Adds horizontal padding */
+            border-bottom: 1px solid var(--border-color); /* Adds a bottom border */
+            box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+            flex-shrink: 0; /* Prevents the header from shrinking */
+        }
+
+        /* Text in the Content Header (usually the file name) */
+        #contentHeaderText {
+            font-size: 17px; /* Sets the font size */
+            font-weight: 600; /* Sets the font weight */
+            color: var(--text-color); /* Sets the text color */
+            white-space: nowrap; /* Prevents text wrapping */
+            overflow: hidden; /* Hides overflowing text */
+            text-overflow: ellipsis; /* Adds ellipsis (...) for overflowing text */
+            text-align: left; /* Left-aligns text for better readability */
+            flex-grow: 1; /* Allows the text to take up available space */
+            margin-right: 8px; /* Adds spacing to the right for buttons */
+            padding: 6px 0; /* Adds vertical padding */
+            display: block; /* Ensures the element is displayed as a block */
+            min-width: 0; /* Allows the flex item to shrink below its content size */
+        }
+
+        /* General Styling for Buttons in the Header (e.g., Edit/Save button) */
+        .header-button { 
+            background-color: var(--accent-color); /* Sets the background color */
+            color: var(--ios-white); /* Sets the text color */
+            border: none; /* Removes the default border */
+            padding: 8px 16px; /* Sets padding */
+            border-radius: var(--border-radius-standard); /* Applies rounded corners */
+            cursor: pointer; /* Changes cursor on hover */
+            font-family: var(--font-family-apple); /* Sets the font */
+            font-size: 15px; /* Sets the font size */
+            font-weight: 500; /* Sets the font weight */
+            transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease; /* Smooth transitions */
+            flex-shrink: 0; /* Prevents the button from shrinking */
+            margin-left: 8px; /* Adds spacing to the left when multiple buttons are present */
+            box-shadow: var(--button-shadow-idle); /* Applies idle state shadow */
+        }
+        /* Hover State for Header Buttons */
+        .header-button:hover {
+            background-color: var(--hover-accent-color); /* Changes background on hover */
+            box-shadow: var(--button-shadow-hover); /* Applies hover shadow */
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+        /* Active (Pressed) State for Header Buttons */
+        .header-button:active {
+            background-color: var(--selected-accent-color); /* Changes background in active state */
+            transform: scale(0.97) translateY(0px); /* Slight reduction in size */
+            box-shadow: var(--button-shadow-active); /* Applies active shadow */
+        }
+        /* Disabled State for Header Buttons */
+        .header-button:disabled { 
+            background-color: var(--ios-system-gray-3); /* Changes background for disabled state */
+            color: var(--ios-system-gray-1); /* Changes text color for disabled state */
+            cursor: not-allowed; /* Changes cursor to indicate disabled state */
+            transform: none; /* Resets any transformation */
+            box-shadow: none; /* Removes shadow for disabled state */
+        }
+
+        /* Container for the Markdown Viewer (rendered output or editor) */
+        .markdown-viewer {
+            padding: 0; /* No padding by default, handled by child elements */
+            flex-grow: 1; /* Allows taking up available vertical space */
+            position: relative; /* Sets positioning context */
+            display: flex; /* Uses Flexbox for layout */
+            flex-direction: column; /* Arranges children vertically */
+            min-height: 300px; /* Ensures a minimum height for the viewer */
+        }
+        
+        /* Styling for both the Markdown Output Display and the WYSIWYG Editor Container */
+        #markdown-output,
+        #wysiwyg-editor-container {
+            flex-grow: 1; /* Allows each view to take up available space */
+            overflow-y: auto; /* Each view scrolls independently */
+            padding: 20px 24px; /* Adds padding */
+            box-sizing: border-box; /* Includes padding in total height/width */
+            line-height: 1.6; /* Consistent line height */
+            flex-shrink: 1; /* Ensure it can shrink if necessary, and establish a minimum height */
+            min-height: 200px; /* Adjust as needed, ensures editor is at least somewhat visible */
+        }        /* Styling for the content within the Toast UI Editor */
+        #wysiwyg-editor-container .toastui-editor-contents {
+            font-family: var(--font-family-apple); /* Matches app font if possible */
+            font-size: 17px; /* Matches paragraph font size for consistency */
+            flex-grow: 1; /* Ensure TUI content area also tries to fill available space */
+            min-height: 100px; /* Or a suitable minimum for typing */
+            line-height: 1.6; /* Match the line height used in the markdown output */
+        }
+        
+        /* Match heading styles with markdown output */
+        #wysiwyg-editor-container .toastui-editor-contents h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 1.2em 0 0.8em;
+            padding-bottom: 0.2em;
+            border-bottom: 1px solid var(--ios-system-gray-5);
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 1.1em 0 0.7em;
+            padding-bottom: 0.15em;
+            border-bottom: 1px solid var(--ios-system-gray-5);
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents h3 {
+            font-size: 19px;
+            font-weight: 600;
+            margin: 1em 0 0.6em;
+        }
+        
+        /* Additional styling for the Toast UI Editor to match Markdown output */
+        #wysiwyg-editor-container .toastui-editor-contents h4 {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0.9em 0 0.5em;
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0.8em 0 0.4em;
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents h6 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0.7em 0 0.3em;
+            color: var(--ios-label-secondary);
+        }
+        
+        /* Paragraphs in editor */
+        #wysiwyg-editor-container .toastui-editor-contents p {
+            margin: 0.8em 0;
+            font-size: 17px;
+        }
+        
+        /* Lists in editor */
+        #wysiwyg-editor-container .toastui-editor-contents ul,
+        #wysiwyg-editor-container .toastui-editor-contents ol {
+            margin: 0.8em 0;
+            padding-left: 2em;
+            font-size: 17px;
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents ul li,
+        #wysiwyg-editor-container .toastui-editor-contents ol li {
+            margin: 0.3em 0;
+        }
+        
+        /* Tables in editor */
+        #wysiwyg-editor-container .toastui-editor-contents table {
+            border-collapse: collapse;
+            margin: 1em 0;
+            font-size: 16px;
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents th {
+            background-color: var(--ios-system-gray-6);
+            font-weight: 600;
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents th,
+        #wysiwyg-editor-container .toastui-editor-contents td {
+            padding: 8px 12px;
+            border: 1px solid var(--ios-system-gray-4);
+        }
+        
+        /* Images in editor */
+        #wysiwyg-editor-container .toastui-editor-contents img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 1em 0;
+        }
+        
+        /* Match link and code styles */
+        #wysiwyg-editor-container .toastui-editor-contents a {
+            color: var(--accent-color);
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents blockquote {
+            border-left: 4px solid var(--ios-system-gray-4);
+            color: var(--ios-label-secondary);
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents code {
+            background-color: var(--ios-system-gray-6);
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+        
+        #wysiwyg-editor-container .toastui-editor-contents pre {
+            background-color: var(--ios-system-gray-6);
+            border-radius: 8px;
+        }
+        /* Specific padding adjustment for the WYSIWYG editor container if needed */
+        #wysiwyg-editor-container {
+             padding: 0; /* TUI editor might have its own internal padding, so reset here */
+             display: flex; /* Make this a flex container */
+             flex-direction: column; /* Arrange TUI editor components vertically */
+             height: 100%; /* Ensure it takes full height of its parent */
+             overflow: hidden; /* Prevent outer scrolling, let Toast UI handle scrolling internally */
+        }
+        
+        /* Toast UI editor specific fixes for mobile */
+        .toastui-editor-defaultUI {
+             height: 100% !important; /* Force full height */
+        }
+        
+        .toastui-editor-defaultUI-toolbar {
+             flex-shrink: 0; /* Prevents toolbar from shrinking */
+        }
+        
+        .toastui-editor-main {
+             min-height: 100px; /* Minimum height for editor main section */
+             flex-grow: 1; /* Allows it to expand */
+        }
+        
+        .toastui-editor-ww-container {
+             min-height: 100px !important; /* Minimum height for WYSIWYG container */
+        }
+
+        /* Download button styling */
+        .download-button {
+            background-color: var(--ios-blue); /* Uses iOS blue for the download button */
+            margin-right: 8px; /* Space between buttons */
+        }
+        
+        /* Media queries for mobile responsiveness */
+        @media (max-width: 768px) {
+            .markdown-viewer {
+                min-height: 250px; /* Smaller minimum height on mobile */
+            }
+            
+            #wysiwyg-editor-container {
+                min-height: 300px; /* Ensure editor has enough height on mobile */
+                max-height: 80vh; /* Limit height on mobile to prevent it from taking too much space */
+            }
+            
+            .toastui-editor-main {
+                min-height: 200px; /* Ensure editor has enough space on mobile */
+            }
+        }
+
+        /* Additional responsive design improvements for mobile */
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 10px; /* Less padding on mobile */
+            }
+            
+            .content-header {
+                flex-direction: column; /* Stack header elements on mobile */
+                align-items: flex-start; /* Align items to the left */
+                gap: 8px; /* Add some spacing between elements */
+                margin-bottom: 12px; /* More margin to separate from content below */
+            }
+            
+            .content-header div:last-child {
+                display: flex; /* Make buttons a row */
+                width: 100%; /* Full width */
+                justify-content: flex-end; /* Push buttons to right side */
+                gap: 8px; /* Space between buttons */
+            }
+            
+            .header-button {
+                padding: 6px 12px; /* Smaller padding on mobile */
+                font-size: 14px; /* Smaller font size */
+            }
+            
+            /* Ensure Toast UI editor toolbar fits on mobile */
+            .toastui-editor-defaultUI-toolbar {
+                flex-wrap: wrap; /* Allow toolbar to wrap on narrow screens */
+                overflow-x: auto; /* Allow horizontal scrolling if needed */
+                padding: 5px; /* Reduce padding */
+            }
+
+            /* Adjust separator lines in editor toolbar */
+            .toastui-editor-toolbar-divider {
+                margin: 5px; /* Less margin around dividers */
+            }
+        }
+
+        /* iOS-like Scrollbar styling for WebKit-based browsers (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+            width: 7px;  /* Width of the scrollbar */
+            height: 7px; /* Height of the scrollbar (for horizontal scrollbars) */
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;  /* Transparent track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--ios-system-gray-3);  /* Color of the scrollbar thumb */
+            border-radius: 4px; /* Rounded corners for the thumb */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--ios-system-gray-2); /* Darker thumb color on hover */
+        }
+
+        /* Responsive Design Adjustments for tablets and larger phones */
+        @media (max-width: 1024px) { /* Applies when screen width is 1024px or less */
+            :root { /* Overrides root variables for this breakpoint */
+                --sidebar-width: 280px;  /* Reduces sidebar width */
+                --app-padding: 12px; /* Reduces app padding */
+            }
+            body {
+                padding: var(--app-padding); /* Applies new padding to the body */
+            }
+            .app-container {
+                max-height: calc(100vh - (2 * var(--app-padding))); /* Adjusts max height with new padding */
+            }
+            
+            /* Adjusts font sizes for Markdown content */
+            #markdown-output h1 { font-size: 26px; }
+            #markdown-output h2 { font-size: 20px; }
+            #markdown-output h3 { font-size: 18px; }
+            #markdown-output p, #markdown-output ul, #markdown-output ol { font-size: 16px; }
+        }
+
+        /* Responsive Design Adjustments for mobile devices */
+        @media (max-width: 768px) { /* Applies when screen width is 768px or less */
+            :root { /* Overrides root variables for this breakpoint */
+                --sidebar-width: 100%;  /* Sidebar takes full width */
+                --header-height: 44px; /* Reduces header height */
+                --title-bar-height: 34px; /* Reduces title bar height */
+                --app-padding: 0;  /* Removes app padding */
+                --border-radius-large: 0px;  /* Removes large border radius (app container becomes square) */
+            }
+
+            body {                padding: 0; /* Removes body padding */
+                align-items: stretch; /* Stretches elements to fill container height */
+                /* Ensures the body takes the full height to push the footer down */
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+
+            .app-container {
+                width: 100%; /* Full width */
+                max-width: 100%; /* Full width */
+                /* Allows the app container to grow but not necessarily fill the entire screen if a footer is present */
+                flex-grow: 1; 
+                border-radius: 0; /* No border radius */
+                border: none; /* No border */
+                box-shadow: none; /* No shadow */
+            }
+
+            .window-title-bar {
+                border-top-left-radius: 0; /* Removes top left border radius */
+                border-top-right-radius: 0; /* Removes top right border radius */
+                padding: 0 10px; /* Adjusts padding */
+            }
+            .mobile-menu-button {
+                display: flex; /* Shows the mobile menu button */
+                align-items: center; /* Vertically aligns the icon */
+            }
+            .window-title-text {
+                padding: 0 10px 0 0; /* Adjusts padding */
+                margin-left: 10px; /* Adds left margin */
+                text-align: left; /* Left-aligns text */
+                flex-grow: 1; /* Allows the text to take up space */
+            }
+            .traffic-light { /* Smaller traffic lights on mobile devices */
+                width: 10px;
+                height: 10px;
+                margin-right: 6px;
+            }
+
+            .main-content-wrapper {
+                flex-direction: column; /* Stacks sidebar and content vertically */
+                position: relative; /* For positioning the sidebar */
+                height: calc(100% - var(--title-bar-height)); /* Adjusts height */
+            }
+
+            .sidebar {
+                position: absolute; /* Absolutely positions the sidebar for overlay effect */
+                top: 0;
+                left: 0;
+                width: 100%; /* Full width */
+                z-index: 1000; /* Ensures the sidebar is on top */
+                height: auto; /* Height adjusts to content */
+                max-height: 50vh; /* Limits the maximum height */
+                border-right: none; /* Removes right border */
+                border-bottom: 1px solid var(--border-color); /* Adds a bottom border */
+                background-color: var(--sidebar-background); /* Sets the background */
+                transform: translateY(-100%); /* Hides the sidebar by default outside the screen */
+                transition: transform 0.3s ease-out; /* Smooth transition for showing/hiding */
+                padding: 12px; /* Adjusts padding */
+            }
+
+            .sidebar.mobile-visible { /* Class added by JS to show the sidebar */
+                transform: translateY(0%); /* Slides the sidebar into view */
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06); /* Adds shadow when visible */
+            }
+            
+            .sidebar-header { /* Adjusts the sidebar header for mobile devices */
+                font-size: 17px;
+                font-weight: 600;
+                margin-bottom: 16px;
+                padding-top: 8px;
+                padding-bottom: 12px;            }            .folder-selection-area { /* Stacks folder/file buttons vertically on mobile devices */
+                grid-template-columns: 1fr; /* One column for vertical arrangement */
+                gap: 16px; /* More space between buttons */
+                padding: 0; /* No horizontal padding */
+                display: flex; /* Flexbox for better control over alignment */
+                flex-direction: column; /* Stacks buttons on top of each other */
+                align-items: center; /* Centers buttons horizontally */
+            }
+            
+            /* Adjustments for buttons on mobile devices */
+            #folderInputButton, 
+            #singleFileInputButton {
+                font-size: 16px; /* Slightly larger font on mobile for better readability */
+                padding: 14px 10px; /* More vertical padding on mobile */
+                min-height: 50px; /* Larger minimum height for better touchability */
+                width: 90%; /* Buttons take 90% of the available width */
+                margin: 0 auto; /* Centers buttons horizontally */
+            }.content-header { /* Adjusts the content header for mobile devices */
+                padding: 10px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                height: auto;
+            }
+            
+            #contentHeaderText { /* Adjusts the content header text for mobile devices */
+                display: inline-block;
+                font-size: 16px;
+                padding: 6px 0;
+                margin-right: 8px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: var(--text-color);
+                font-weight: 600;
+                width: 60%;
+            }
+            
+            .content-header div:last-child { /* Container for buttons */
+                display: flex;
+                align-items: center;
+                width: auto;
+            }
+            .header-button { /* Smaller header buttons on mobile */
+                padding: 6px 10px; 
+                font-size: 14px;
+                margin-left: 6px;
+                margin-top: 0; /* Remove negative margin */
+            }
+            #markdown-output, 
+            #wysiwyg-editor-container { /* Adjusts padding for content areas on mobile */
+                padding: 15px;
+                /* min-height: 300px; */ /* REMOVED: Temporary diagnostic */
+            }
+            #wysiwyg-editor-container .toastui-editor-contents { /* Adjusts TUI editor font size for mobile */
+                font-size: 16px; 
+            }
+        }
+
+        /* Wrapper for the entire application, including app-container and footer */
+        /* This helps in positioning the footer correctly, especially with flexbox on body */
+        .app-wrapper { 
+            display: flex; /* Uses flexbox */
+            flex-direction: column; /* Stacks children (app-container, footer) vertically */
+            align-items: center; /* Centers children horizontally */
+            width: 100%; /* Takes full width */
+            padding: var(--app-padding); /* Uses the main app padding variable */
+            box-sizing: border-box; /* Includes padding in total width/height */
+            flex-grow: 1; /* Allows this wrapper to grow and fill space, pushing footer down */
+        }
+
+        /* Footer styling */
+            .footer {
+                width: 100%; /* Takes full width */
+                max-width: var(--app-max-width); /* Aligns with the app-container's max width */
+                padding: 15px 0; /* Adds vertical padding */
+                text-align: center; /* Centers the text content */
+                font-size: 12px; /* Sets a smaller font size for footer text */
+                color: var(--ios-label-tertiary); /* Uses a subtle text color */
+                font-family: var(--font-family-apple); /* Sets the font */
+                margin-top: 20px; /* Adds space above the footer */
+                display: flex; /* Uses flexbox for aligning items within the footer */
+                justify-content: center; /* Centers items horizontally */
+                align-items: center; /* Aligns items vertically */
+                gap: 10px; /* Adds space between the text and the GitHub logo */
+                flex-shrink: 0; /* ADDED - Prevents footer from shrinking */
+            }
+
+            @media (max-width: 768px) {
+                .footer {
+                margin-top: 0;
+                }
+            }
+        /* Styling for links within the footer */
+        .footer a {
+            color: var(--ios-label-secondary); /* Slightly more prominent color for the link */
+            text-decoration: none; /* Removes default underline */
+            display: inline-flex; /* Allows vertical alignment of icon with text if needed */
+            align-items: center; /* Vertically aligns icon with text */
+        }
+
+        /* Hover state for footer links */
+        .footer a:hover {
+            color: var(--accent-color); /* Changes color to accent color on hover */
+            text-decoration: underline; /* Adds underline on hover */
+        }
+
+        /* Styling for the GitHub logo SVG within the footer link */
+        .footer .github-logo svg {
+            width: 18px; /* Sets the width of the SVG icon */
+            height: 18px; /* Sets the height of the SVG icon */
+            fill: currentColor; /* Makes the SVG icon inherit its color from the parent 'a' tag */
+        }
+
+        /* Styling for Markdown content in the output area */
+        #markdown-output {
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+        
+        /* Headings in Markdown output */
+        #markdown-output h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 1.2em 0 0.8em;
+            padding-bottom: 0.2em;
+            border-bottom: 1px solid var(--ios-system-gray-5);
+        }
+        
+        #markdown-output h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 1.1em 0 0.7em;
+            padding-bottom: 0.15em;
+            border-bottom: 1px solid var(--ios-system-gray-5);
+        }
+        
+        #markdown-output h3 {
+            font-size: 19px;
+            font-weight: 600;
+            margin: 1em 0 0.6em;
+        }
+        
+        #markdown-output h4 {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0.9em 0 0.5em;
+        }
+        
+        #markdown-output h5 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0.8em 0 0.4em;
+        }
+        
+        #markdown-output h6 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0.7em 0 0.3em;
+            color: var(--ios-label-secondary);
+        }
+        
+        /* Paragraphs in Markdown output */
+        #markdown-output p {
+            margin: 0.8em 0;
+            font-size: 17px;
+        }
+        
+        /* Links in Markdown output */
+        #markdown-output a {
+            color: var(--accent-color);
+            text-decoration: none;
+            word-break: break-word;
+        }
+        
+        #markdown-output a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Lists in Markdown output */
+        #markdown-output ul, 
+        #markdown-output ol {
+            margin: 0.8em 0;
+            padding-left: 2em;
+            font-size: 17px;
+        }
+        
+        #markdown-output ul li,
+        #markdown-output ol li {
+            margin: 0.3em 0;
+        }
+        
+        /* Nested lists */
+        #markdown-output ul ul, 
+        #markdown-output ul ol,
+                /* Verschachtelte Listen */
+        #markdown-output ul ul, 
+        #markdown-output ul ol,
+        #markdown-output ol ul, 
+        #markdown-output ol ol {
+            margin: 0.3em 0;
+        }
+        
+        /* Blockquotes in der Markdown-Ausgabe */
+        #markdown-output blockquote {
+            padding-left: 1em;
+            margin: 1em 0;
+            border-left: 4px solid var(--ios-system-gray-4);
+            color: var(--ios-label-secondary);
+        }
+        
+        /* Codeblöcke in der Markdown-Ausgabe */
+        #markdown-output pre {
+            background-color: var(--ios-system-gray-6);
+            padding: 12px 16px;
+            border-radius: 8px;
+            overflow: auto;
+            margin: 1em 0;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 15px;
+        }
+        
+        /* Inline-Code in der Markdown-Ausgabe */
+        #markdown-output code {
+            background-color: var(--ios-system-gray-6);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 90%;
+        }
+        
+        #markdown-output pre code {
+            padding: 0;
+            background-color: transparent;
+            font-size: 15px;
+        }
+        
+        /* Horizontale Linie in der Markdown-Ausgabe */
+        #markdown-output hr {
+            height: 1px;
+            background-color: var(--ios-system-gray-4);
+            border: none;
+            margin: 1.5em 0;
+        }
+        
+        /* Tabellen in der Markdown-Ausgabe */
+        #markdown-output table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 16px;
+        }
+        
+        #markdown-output th {
+            background-color: var(--ios-system-gray-6);
+            font-weight: 600;
+        }
+        
+        #markdown-output th, 
+        #markdown-output td {
+            padding: 8px 12px;
+            border: 1px solid var(--ios-system-gray-4);
+            text-align: left;
+        }
+        
+        #markdown-output tr:nth-child(even) {
+            background-color: var(--ios-system-gray-6);
+        }
+        
+        /* Bilder in der Markdown-Ausgabe */
+        #markdown-output img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 1em 0;
+            box-shadow: 0 1px 1px rgba(26, 26, 26, 0.12), 0 1px 2px rgba(47, 47, 47, 0.12);
+        }
