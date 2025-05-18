@@ -890,15 +890,15 @@
           // Hilfsfunktion zur Überprüfung und Anzeige des mobilen Menüs
         function checkAndShowMobileMenu() {
             const isMobileView = window.innerWidth <= 768;
-            
-            // Automatisches Anzeigen des Menüs nur, wenn kein Inhalt geladen ist
+              // Automatisches Anzeigen des Menüs nur, wenn kein Inhalt geladen ist
             if (isMobileView && !currentFileRawContent) {
                 sidebar.classList.add('mobile-visible');
                 mobileMenuButton.setAttribute('aria-expanded', 'true');
                 
-                // Set margin-top for content area to 20vh when no file is loaded
+                // Tatsächliche Höhe des Menüs für den Abstand verwenden
                 setTimeout(() => {
-                    document.querySelector('.content-area').style.marginTop = '20vh';
+                    const sidebarHeight = sidebar.getBoundingClientRect().height;
+                    document.querySelector('.content-area').style.marginTop = `${sidebarHeight}px`;
                 }, 10);
             }
         }
