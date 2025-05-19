@@ -30,42 +30,36 @@ This application allows users to select local Markdown files or folders, view th
 ## ✨ Features
 
 ### 📂 File Management
-![File Management Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/file-icon.svg)
 * Select individual `.md` files or entire folders
 * Browse and view multiple files from a folder
 * Intuitive file navigation sidebar
 * Session persistence through browser storage
 
 ### 📝 Editing Experience
-![Editing Experience Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/edit-icon.svg)
 * WYSIWYG Markdown editing with Toast UI Editor
 * Instant preview of formatted content
 * Automatic file download when changes are saved
 * Clean iOS-inspired design for distraction-free editing
 
 ### 🎨 Modern UI/UX
-![Modern UI/UX Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/ui-icon.svg)
 * Responsive design works on all devices
 * iOS-like aesthetics with intuitive controls
 * Dark mode support through system preferences
 * Animated transitions for a polished feel
 
 ### ⚡ Performance
-![Performance Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/performance-icon.svg)
 * Dynamic content loading without page reloads
 * Fast Markdown rendering with Marked.js
 * Local caching for improved speed
 * Offline capability for editing without internet
 
 ### 🔒 Security
-![Security Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/security-icon.svg)
 * All processing happens client-side
 * No server uploads of your content
 * No tracking or analytics
 * Open source code for full transparency
 
 ### ♿ Accessibility
-![Accessibility Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/accessibility-icon.svg)
 * Keyboard shortcuts for common actions
 * Screen reader friendly markup
 * High contrast mode support
