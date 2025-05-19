@@ -4,103 +4,72 @@
 
 # ✨ Markdown Viewer & Editor ✨
 
-<p align="center">
-<strong>A modern, lightweight web application for viewing and editing Markdown files with an elegant iOS-inspired interface.</strong>
-</p>
+**A modern, lightweight web application for viewing and editing Markdown files with an elegant iOS-inspired interface.**
+
+</div>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg?style=for-the-badge)](https://github.com/marselnenaj/modern-markdown-editor-html5/releases)
 [![Demo](https://img.shields.io/badge/demo-online-brightgreen.svg?style=for-the-badge)](https://marselnenaj.github.io/modern-markdown-editor-html5/)
 [![Responsive](https://img.shields.io/badge/responsive-yes-orange.svg?style=for-the-badge)](#browser-compatibility)
 
-<p align="center">
 This application allows users to select local Markdown files or folders, view their rendered HTML, and edit them using a powerful WYSIWYG editor - all in a beautiful, responsive design.
-</p>
 
 <br>
 
-<p align="center">
-  <a href="#-features">✨ Features</a> •
-  <a href="#-demo">🚀 Demo</a> •
-  <a href="#-installation">💻 Installation</a> •
-  <a href="#-usage">📝 Usage</a> •
-  <a href="#️-technologies-used">🛠️ Technologies</a> •
-  <a href="#-browser-compatibility">📱 Compatibility</a> •
-  <a href="#-license">📄 License</a>
-</p>
-
-</div>
+[✨ Features](#-features) •
+[🚀 Demo](#-demo) •
+[💻 Installation](#-installation) •
+[📝 Usage](#-usage) •
+[🛠️ Technologies Used](#️-technologies-used) •
+[📱 Compatibility](#-browser-compatibility) •
+[📄 License](#-license)
 
 ---
 
 ## ✨ Features
 
-<table align="center">
-  <tr>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/file-icon.svg" width="60" height="60" alt="File Management"/><br/>
-      <h3>📂 File Management</h3>
-      <ul align="left">
-        <li>Select individual <code>.md</code> files or entire folders</li>
-        <li>Browse and view multiple files from a folder</li>
-        <li>Intuitive file navigation sidebar</li>
-        <li>Session persistence through browser storage</li>
-      </ul>
-    </td>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/edit-icon.svg" width="60" height="60" alt="Editing Experience"/><br/>
-      <h3>📝 Editing Experience</h3>
-      <ul align="left">
-        <li>WYSIWYG Markdown editing with Toast UI Editor</li>
-        <li>Instant preview of formatted content</li>
-        <li>Automatic file download when changes are saved</li>
-        <li>Clean iOS-inspired design for distraction-free editing</li>
-      </ul>
-    </td>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/ui-icon.svg" width="60" height="60" alt="Modern UI/UX"/><br/>
-      <h3>🎨 Modern UI/UX</h3>
-      <ul align="left">
-        <li>Responsive design works on all devices</li>
-        <li>iOS-like aesthetics with intuitive controls</li>
-        <li>Dark mode support through system preferences</li>
-        <li>Animated transitions for a polished feel</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/performance-icon.svg" width="60" height="60" alt="Performance"/><br/>
-      <h3>⚡ Performance</h3>
-      <ul align="left">
-        <li>Dynamic content loading without page reloads</li>
-        <li>Fast Markdown rendering with Marked.js</li>
-        <li>Local caching for improved speed</li>
-        <li>Offline capability for editing without internet</li>
-      </ul>
-    </td>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/security-icon.svg" width="60" height="60" alt="Security"/><br/>
-      <h3>🔒 Security</h3>
-      <ul align="left">
-        <li>All processing happens client-side</li>
-        <li>No server uploads of your content</li>
-        <li>No tracking or analytics</li>
-        <li>Open source code for full transparency</li>
-      </ul>
-    </td>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/accessibility-icon.svg" width="60" height="60" alt="Accessibility"/><br/>
-      <h3>♿ Accessibility</h3>
-      <ul align="left">
-        <li>Keyboard shortcuts for common actions</li>
-        <li>Screen reader friendly markup</li>
-        <li>High contrast mode support</li>
-        <li>Resizable text and controls</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+### 📂 File Management
+![File Management Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/file-icon.svg)
+* Select individual `.md` files or entire folders
+* Browse and view multiple files from a folder
+* Intuitive file navigation sidebar
+* Session persistence through browser storage
+
+### 📝 Editing Experience
+![Editing Experience Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/edit-icon.svg)
+* WYSIWYG Markdown editing with Toast UI Editor
+* Instant preview of formatted content
+* Automatic file download when changes are saved
+* Clean iOS-inspired design for distraction-free editing
+
+### 🎨 Modern UI/UX
+![Modern UI/UX Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/ui-icon.svg)
+* Responsive design works on all devices
+* iOS-like aesthetics with intuitive controls
+* Dark mode support through system preferences
+* Animated transitions for a polished feel
+
+### ⚡ Performance
+![Performance Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/performance-icon.svg)
+* Dynamic content loading without page reloads
+* Fast Markdown rendering with Marked.js
+* Local caching for improved speed
+* Offline capability for editing without internet
+
+### 🔒 Security
+![Security Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/security-icon.svg)
+* All processing happens client-side
+* No server uploads of your content
+* No tracking or analytics
+* Open source code for full transparency
+
+### ♿ Accessibility
+![Accessibility Icon](https://raw.githubusercontent.com/marselnenaj/modern-markdown-editor-html5/assets/accessibility-icon.svg)
+* Keyboard shortcuts for common actions
+* Screen reader friendly markup
+* High contrast mode support
+* Resizable text and controls
 
 ## 🚀 Demo
 
@@ -111,8 +80,6 @@ This application allows users to select local Markdown files or folders, view th
 </div>
 
 ## 💻 Installation
-
-<div class="installation-options">
 
 ### 🌐 Use Online
 
@@ -145,7 +112,6 @@ open index.html
 # Or on Windows
 start index.html
 ```
-</div>
 
 ## 📝 Usage
 
@@ -203,7 +169,7 @@ Please ensure your code adheres to the existing style and includes appropriate c
 
 This project is licensed under the MIT License - see below for details:
 
-```
+```text
 MIT License
 
 Copyright (c) 2025 Marsel Nenaj
@@ -230,5 +196,5 @@ SOFTWARE.
 ## 🙏 Attribution
 
 * **Prompted by:** Marsel Nenaj
-* **Coded by:**  Gemini 2.5 Pro & Claude 3.7
+* **Coded by:** Gemini 2.5 Pro & Claude 3.7
 * **GitHub Repository:** [modern-markdown-editor-html5](https://github.com/marselnenaj/modern-markdown-editor-html5)

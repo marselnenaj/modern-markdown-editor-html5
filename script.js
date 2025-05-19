@@ -26,7 +26,10 @@
         let currentFileRawContent = ''; // Stores the raw text content of the currently displayed file
         let originalFileContent = ''; // Stores the original unchanged content to detect changes
         let currentFileName = ''; // Stores the name of the currently edited/displayed file
-        let contentWasChanged = false; // Speichert, ob der Inhalt seit dem letzten Laden geändert wurde        // Event Listener for Mobile Menu Button: Toggles sidebar visibility on mobile devices
+        let contentWasChanged = false; // Speichert, ob der Inhalt seit dem letzten Laden geändert wurde
+        let userMadeChangesInEditor = false; // Tracks if the user has made changes in the editor
+        
+        // Event Listener for Mobile Menu Button: Toggles sidebar visibility on mobile devices
         mobileMenuButton.addEventListener('click', () => {
             const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
             mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
@@ -256,6 +259,7 @@
         // Function to Initialize Toast UI Editor: Creates or recreates the WYSIWYG editor
         function initializeTuiEditor(content) {
             if (tuiEditor) { tuiEditor.destroy(); tuiEditor = null; } // Destroys existing instance if present
+            userMadeChangesInEditor = false; // Reset flag when editor is initialized
             
             // Determines the correct editor height based on the device
             const isMobile = window.innerWidth <= 768;
@@ -290,15 +294,7 @@
                     change: () => {
                         // Wenn Editor Inhalt geändert wurde
                         if (tuiEditor) {
-                            const currentContent = tuiEditor.getMarkdown();
-                            
-                            // Prüfen, ob der Inhalt wirklich geändert wurde (normalisiert Zeilenumbrüche)
-                            const normalizedOriginal = originalFileContent.replace(/\r\n/g, '\n');
-                            const normalizedNew = currentContent.replace(/\r\n/g, '\n');
-                            
-                            // Prüft, ob es eine echte Änderung gibt
-                            contentWasChanged = normalizedNew !== normalizedOriginal && 
-                                              normalizedNew.trim() !== normalizedOriginal.trim();
+                            userMadeChangesInEditor = true; // Set flag when user makes a change
                         }
                     }
                 }
@@ -724,25 +720,30 @@
                 }
             }, 200);
         }        // Function to Save Content and Switch to View Mode: Saves changes and returns to viewing
+        
         function saveAndSwitchToViewMode() {
-            let newContent = '';
-            
+            let newContentFromEditor = '';
+            let contentChanged = false;
+
             if (tuiEditor) { // If the TUI editor instance exists
-                newContent = tuiEditor.getMarkdown(); // Gets the Markdown content from the editor
+                if (userMadeChangesInEditor) {
+                    newContentFromEditor = tuiEditor.getMarkdown(); // Gets the Markdown content from the editor
+                    // Direct comparison: contentChanged is true if the strings are not identical.
+                    contentChanged = newContentFromEditor !== originalFileContent;
+                } else {
+                    // If user made no changes, ensure we don't use editor's potentially re-serialized content
+                    newContentFromEditor = originalFileContent; // Keep original content
+                    contentChanged = false; // No changes to save or download
+                }
                 tuiEditor.destroy(); // Destroys the editor instance properly
                 tuiEditor = null; // Resets the editor variable
             }
-              // Normalize line breaks in content
-            newContent = newContent.replace(/\r\n/g, '\n');
-            const normalizedOriginal = originalFileContent.replace(/\r\n/g, '\n');
-            const contentChanged = newContent !== normalizedOriginal && newContent.trim() !== normalizedOriginal.trim();
             
-            // Always update the current content and mark it as changed if there were actual changes
             if (contentChanged) {
-                currentFileRawContent = newContent;
+                currentFileRawContent = newContentFromEditor; 
                 contentWasChanged = true; // Markieren, dass Änderungen vorgenommen wurden
                   // Update cache and localStorage with the updated content, but silent to avoid duplicate toast
-                updateCacheAndLocalStorage(currentFileName, newContent, true); // silent to avoid duplicate toast
+                updateCacheAndLocalStorage(currentFileName, newContentFromEditor, true); 
             }
             
             // Displays the (potentially updated) content as rendered Markdown

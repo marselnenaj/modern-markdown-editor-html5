@@ -37,17 +37,7 @@
 
             /* Border and Separator Colors */
             --border-color: var(--ios-system-gray-4); /* Default border color */
-            --separator-color: var(--ios-system-gray-5); /* Color for separators */
-
-            /* Dark Mode Colors */
-            --dark-background: #1c1c1e; /* Dark background for dark mode */
-            --dark-secondary-background: #2c2c2e; /* Secondary dark background */
-            --dark-tertiary-background: #3a3a3c; /* Tertiary dark background */
-            --dark-text-primary: #ffffff; /* Primary text color for dark mode */
-            --dark-text-secondary: rgba(235, 235, 245, 0.6); /* Secondary text for dark mode */
-            --dark-border: #3a3a3c; /* Border color for dark mode */
-            
-            /* Accent Colors */
+            --separator-color: var(--ios-system-gray-5); /* Color for separators */            /* Accent Colors */
             --accent-color: var(--ios-blue); /* Primary accent color */
             --hover-accent-color: var(--ios-blue-hover); /* Accent color for hover states */
             --selected-accent-color: var(--ios-blue-selected); /* Accent color for selected elements */
